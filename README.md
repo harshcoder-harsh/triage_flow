@@ -1,4 +1,4 @@
-## TriageFlow
+# TriageFlow
 **An offline-first, drag-and-drop symptom triage flowchart builder for frontline healthcare workers.**
 
 ---
@@ -180,7 +180,39 @@ The Flowchart is the single top-level entity stored in MongoDB. It embeds two ar
 
 ---
 
-## 9. API Documentation & Testing
+## 9. Project Structure
+
+```
+triageflow/
+│
+├── client/                          # React Frontend
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── FlowBuilder.jsx      # Drag & drop canvas
+│   │   │   └── NavigateMode.jsx     # Patient assessment screen
+│   │   ├── App.jsx                  # Main app with mode switching
+│   │   ├── main.jsx                 # React entry point
+│   │   └── index.css                # Tailwind imports
+│   ├── package.json
+│   └── vite.config.js
+│
+├── server/                          # Node.js Backend
+│   ├── index.js                     # Express server + all routes
+│   ├── .env                         # MONGO_URI + PORT
+│   └── package.json
+│
+├── electron/                        # Electron Desktop Shell
+│   ├── main.js                      # Electron window config
+│   └── package.json
+│
+└── README.md
+```
+
+---
+
+## 10. API Documentation & Testing
 
 ### API Endpoints
 
@@ -228,7 +260,7 @@ Response: { nextNode }
 
 ---
 
-## 10. Module-wise Development & Deliverables
+## 11. Module-wise Development & Deliverables
 
 ### Checkpoint 1: Research & Planning
 - Deliverables: Problem understanding, tech stack finalization, data schema design, GitHub repository setup, team role assignment
@@ -250,7 +282,7 @@ Response: { nextNode }
 
 ---
 
-## 11. End-to-End Workflow
+## 12. End-to-End Workflow
 
 1. Doctor opens TriageFlow desktop app and navigates to Builder Mode
 2. Doctor drags Question nodes and Outcome nodes onto the canvas
@@ -267,7 +299,7 @@ Response: { nextNode }
 
 ---
 
-## 12. Demo & Video
+## 13. Demo & Video
 
 - **Live Demo Link:** *(Add link here)*
 - **Demo Video Link:** *(Add link here)*
@@ -275,7 +307,7 @@ Response: { nextNode }
 
 ---
 
-## 13. Hackathon Deliverables Summary
+## 14. Hackathon Deliverables Summary
 
 - Functional drag-and-drop flowchart builder with React Flow
 - Real-time Navigate Mode for step-by-step patient triage assessment
@@ -286,7 +318,7 @@ Response: { nextNode }
 
 ---
 
-## 14. Team Roles & Responsibilities
+## 15. Team Roles & Responsibilities
 
 | Member | Role | Responsibilities |
 |---|---|---|
@@ -296,7 +328,7 @@ Response: { nextNode }
 
 ---
 
-## 15. Future Scope & Scalability
+## 16. Future Scope & Scalability
 
 ### Short-Term
 - Export triage protocols as printable PDF flowcharts
@@ -314,7 +346,7 @@ Response: { nextNode }
 
 ---
 
-## 16. Known Limitations
+## 17. Known Limitations
 
 - Electron app bundle size is large (150–300MB) due to bundled Chromium
 - No authentication system in the current version — any user can edit protocols
@@ -324,7 +356,7 @@ Response: { nextNode }
 
 ---
 
-## 17. Impact
+## 18. Impact
 
 - Reduces cognitive load on frontline healthcare workers during patient assessment
 - Standardizes triage decisions across different workers and shifts, reducing inconsistency
