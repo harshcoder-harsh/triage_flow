@@ -7,7 +7,6 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-gray-50">
-      {/* Header */}
       <div className="bg-indigo-600 text-white px-6 py-4 flex items-center justify-between shadow-md z-10">
         <div className="flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -31,7 +30,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* Main Content Area */}
       <div className="flex-1 min-h-0 relative">
         {mode === 'builder' ? <FlowBuilder /> : <NavigateMode />}
       </div>
