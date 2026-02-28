@@ -1,7 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-// Flowchart Schema (same as index.js)
 const nodeSchema = new mongoose.Schema({
   id: String,
   type: String,
@@ -51,7 +50,6 @@ const seedDatabase = async () => {
     await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/triageflow');
     console.log('Connected to MongoDB');
 
-    // Clear existing
     await Flowchart.deleteMany({});
     console.log('Cleared existing flowcharts');
 
@@ -184,7 +182,7 @@ const seedDatabase = async () => {
           style: { strokeWidth: 2 }
         },
         {
-          id: 'edge-3-4', // Difficulty breathing -> Emergency
+          id: 'edge-3-4', 
           source: 'node-3',
           target: 'node-4',
           label: 'Yes',
@@ -193,7 +191,7 @@ const seedDatabase = async () => {
           style: { strokeWidth: 2 }
         },
         {
-          id: 'edge-3-6', // No difficulty breathing -> Home care
+          id: 'edge-3-6',
           source: 'node-3',
           target: 'node-6',
           label: 'No',
