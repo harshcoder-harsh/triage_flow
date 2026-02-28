@@ -127,7 +127,6 @@ export default function FlowBuilder() {
 
     return (
         <div className="absolute inset-0 flex bg-gray-50">
-            {/* Sidebar Tool Panel */}
             <div className="w-72 bg-white border-r border-gray-200 p-5 flex flex-col overflow-y-auto shadow-sm z-10">
 
                 <div className="mb-6">
@@ -191,9 +190,7 @@ export default function FlowBuilder() {
                 </div>
             </div>
 
-            {/* Main Graph Canvas Area */}
             <div className="flex-1 h-full w-full relative">
-                {/* Instruction Panel */}
                 <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-indigo-100 text-sm pointer-events-none max-w-sm">
                     <h3 className="font-bold text-indigo-800 mb-3 text-base flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
@@ -207,7 +204,6 @@ export default function FlowBuilder() {
                     </ul>
                 </div>
 
-                {/* Edge Label Modal */}
                 {pendingEdge && (
                     <div className="absolute inset-0 z-50 flex items-center justify-center bg-gray-900/40 backdrop-blur-sm">
                         <div className="bg-white p-6 rounded-2xl shadow-2xl border border-gray-100 w-96 transform transition-all">
@@ -229,7 +225,6 @@ export default function FlowBuilder() {
                     </div>
                 )}
 
-                {/* Inject styles for the tooltip on node hover */}
                 <style>{`
                     .react-flow__node:hover::after {
                         content: 'Drag from the handle to connect';
