@@ -15,7 +15,7 @@ const edgeTypes = {}
 
 const defaultNodeStyle = {
     background: '#fff',
-    border: '2px solid #6366f1',
+    border: '2px solid #1e293b',
     borderRadius: '12px',
     padding: '16px',
     width: '180px',
@@ -40,6 +40,7 @@ export default function FlowBuilder() {
     const [labelInput, setLabelInput] = useState('')
     const [priority, setPriority] = useState('NONE')
     const [flowchartName, setFlowchartName] = useState('New Triage Protocol')
+    const [category, setCategory] = useState('General')
     const [errorMsg, setErrorMsg] = useState('')
     const [successMsg, setSuccessMsg] = useState('')
     const [pendingEdge, setPendingEdge] = useState(null)
@@ -107,15 +108,20 @@ export default function FlowBuilder() {
         setSelectedNode(null)
     }
 
-    const saveFlowchart = async () => {
+    const saveFlowchart = async (status) => {
         setErrorMsg('')
         setSuccessMsg('')
         try {
+            const token = localStorage.getItem('token');
             if (nodes.length === 0) throw new Error("Add at least one node");
             await axios.post('http://localhost:5001/api/flowchart', {
                 name: flowchartName,
+                category,
+                status,
                 nodes,
                 edges,
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
             })
             setSuccessMsg('Flowchart saved successfully!')
             setTimeout(() => setSuccessMsg(''), 3000)
@@ -132,7 +138,7 @@ export default function FlowBuilder() {
                 <div className="mb-6">
                     <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Protocol Name</label>
                     <input
-                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow"
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 transition-shadow"
                         value={flowchartName}
                         onChange={(e) => setFlowchartName(e.target.value)}
                         placeholder="E.g., Fever Triage Protocol"
@@ -142,7 +148,7 @@ export default function FlowBuilder() {
                 <div className="mb-6">
                     <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Add Components</label>
                     <div className="flex flex-col gap-2">
-                        <button onClick={addQuestionNode} className="flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                        <button onClick={addQuestionNode} className="flex items-center justify-center gap-2 bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-md text-sm font-medium transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                             Standard Question
                         </button>
@@ -160,6 +166,22 @@ export default function FlowBuilder() {
                     </div>
                 </div>
 
+                <div className="mb-6">
+                    <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Category</label>
+                    <select
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 bg-white"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+                        <option value="General">General</option>
+                        <option value="Fever">Fever</option>
+                        <option value="Cardiac">Cardiac</option>
+                        <option value="Pediatric">Pediatric</option>
+                        <option value="Respiratory">Respiratory</option>
+                        <option value="Emergency">Emergency</option>
+                    </select>
+                </div>
+
                 {selectedNode && (
                     <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
                         <label className="block text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide flex justify-between">
@@ -167,22 +189,25 @@ export default function FlowBuilder() {
                             <button onClick={() => setSelectedNode(null)} className="text-gray-400 hover:text-gray-600">×</button>
                         </label>
                         <textarea
-                            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-3 resize-none"
+                            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 mb-3 resize-none"
                             rows={3}
                             value={labelInput}
                             onChange={(e) => setLabelInput(e.target.value)}
                             placeholder="Question text..."
                         />
-                        <button onClick={updateNodeLabel} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm">
+                        <button onClick={updateNodeLabel} className="w-full bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm">
                             Save Changes
                         </button>
                     </div>
                 )}
 
-                <div className="mt-auto pt-6">
-                    <button onClick={saveFlowchart} className="w-full bg-gray-900 hover:bg-gray-800 text-white px-4 py-3 rounded-lg text-sm font-bold shadow-md transition-all flex items-center justify-center gap-2">
+                <div className="mt-auto pt-6 flex flex-col gap-2">
+                    <button onClick={() => saveFlowchart('published')} className="w-full bg-slate-800 hover:bg-slate-700 text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow-md transition-colors flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-                        Save Protocol to DB
+                        Publish Protocol
+                    </button>
+                    <button onClick={() => saveFlowchart('draft')} className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-colors flex items-center justify-center gap-2">
+                        Save as Draft
                     </button>
 
                     {errorMsg && <p className="text-red-500 text-xs mt-3 text-center font-medium bg-red-50 p-2 rounded border border-red-100">{errorMsg}</p>}
@@ -191,16 +216,16 @@ export default function FlowBuilder() {
             </div>
 
             <div className="flex-1 h-full w-full relative">
-                <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-indigo-100 text-sm pointer-events-none max-w-sm">
-                    <h3 className="font-bold text-indigo-800 mb-3 text-base flex items-center gap-2">
+                <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm p-5 rounded-xl shadow-lg border border-slate-100 text-sm pointer-events-none max-w-sm">
+                    <h3 className="font-bold text-slate-800 mb-3 text-base flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
                         How to Build
                     </h3>
                     <ul className="text-gray-700 space-y-2">
-                        <li><strong className="text-indigo-600">Step 1:</strong> Add a Question node</li>
-                        <li><strong className="text-indigo-600">Step 2:</strong> Add an Outcome node</li>
-                        <li><strong className="text-indigo-600">Step 3:</strong> Drag from the dot on the bottom of one node to the dot on top of another to connect them</li>
-                        <li><strong className="text-indigo-600">Step 4:</strong> Type the answer label in the popup</li>
+                        <li><strong className="text-slate-600">Step 1:</strong> Add a Question node</li>
+                        <li><strong className="text-slate-600">Step 2:</strong> Add an Outcome node</li>
+                        <li><strong className="text-slate-600">Step 3:</strong> Drag from the dot on the bottom of one node to the dot on top of another to connect them</li>
+                        <li><strong className="text-slate-600">Step 4:</strong> Type the answer label in the popup</li>
                     </ul>
                 </div>
 
@@ -211,7 +236,7 @@ export default function FlowBuilder() {
                             <p className="text-sm text-gray-500 mb-5">What is the label for this connection? (e.g., Yes, No, Maybe)</p>
                             <input
                                 autoFocus
-                                className="w-full border-2 border-indigo-100 rounded-lg px-4 py-3 text-base focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mb-6 transition-colors font-medium text-gray-800 placeholder-gray-300"
+                                className="w-full border-2 border-slate-100 rounded-lg px-4 py-3 text-base focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 mb-6 transition-colors font-medium text-gray-800 placeholder-gray-300"
                                 placeholder="Connection label..."
                                 value={edgeLabelInput}
                                 onChange={e => setEdgeLabelInput(e.target.value)}
@@ -219,7 +244,7 @@ export default function FlowBuilder() {
                             />
                             <div className="flex gap-3 justify-end">
                                 <button onClick={cancelEdgeConnection} className="px-5 py-2.5 text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Cancel</button>
-                                <button onClick={confirmEdgeConnection} className="px-5 py-2.5 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-sm">Connect</button>
+                                <button onClick={confirmEdgeConnection} className="px-5 py-2.5 text-sm font-bold text-white bg-slate-600 hover:bg-slate-700 rounded-lg transition-colors shadow-sm">Connect</button>
                             </div>
                         </div>
                     </div>
@@ -276,7 +301,7 @@ export default function FlowBuilder() {
                             if (n.data?.priority === 'RED') return '#EF4444';
                             if (n.data?.priority === 'YELLOW') return '#F59E0B';
                             if (n.data?.priority === 'GREEN') return '#10B981';
-                            return '#6366f1';
+                            return '#1e293b';
                         }}
                     />
                     <Controls />

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-export default function NavigateMode() {
+export default function NavigateMode({ isOnline }) {
     const [flowcharts, setFlowcharts] = useState([])
     const [selected, setSelected] = useState(null)
     const [currentNode, setCurrentNode] = useState(null)
@@ -9,16 +9,42 @@ export default function NavigateMode() {
     const [result, setResult] = useState(null)
     const [loading, setLoading] = useState(true)
 
+    // Fetch flowcharts based on online/offline state
     useEffect(() => {
-        axios.get('http://localhost:5001/api/flowcharts')
-            .then(r => {
-                setFlowcharts(r.data)
-                setLoading(false)
-            })
-            .catch(() => {
-                setLoading(false)
-            })
-    }, [])
+        const fetchFlowcharts = async () => {
+            setLoading(true);
+            if (isOnline) {
+                try {
+                    const token = localStorage.getItem('token');
+                    const r = await axios.get('http://localhost:5001/api/flowcharts', {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setFlowcharts(r.data);
+
+                    // Cache the data and timestamp
+                    localStorage.setItem('cached_flowcharts', JSON.stringify(r.data));
+                    localStorage.setItem('last_synced', new Date().toISOString());
+                } catch (e) {
+                    console.error("Failed to fetch online flowcharts", e);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                // Offline mode: load from cache
+                try {
+                    const cached = localStorage.getItem('cached_flowcharts');
+                    if (cached) {
+                        setFlowcharts(JSON.parse(cached));
+                    }
+                } catch (e) {
+                    console.error("Failed to parse cached flowcharts", e);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        fetchFlowcharts();
+    }, [isOnline])
 
     const startProtocol = (flowchart) => {
         setSelected(flowchart)
@@ -65,37 +91,88 @@ export default function NavigateMode() {
         return <div className="flex h-full w-full items-center justify-center text-gray-400">Loading Protocols...</div>
     }
 
-    if (!selected) return (
-        <div className="flex justify-center w-full h-full p-8 overflow-y-auto">
-            <div className="w-full max-w-2xl mt-8">
-                <h2 className="text-3xl font-extrabold text-gray-800 mb-2 tracking-tight">Triage Protocols</h2>
-                <p className="text-gray-500 mb-8 font-medium">Select a protocol from the list to start a patient assessment.</p>
+    // List view
+    if (!selected) {
+        const lastSynced = localStorage.getItem('last_synced');
 
-                <div className="flex flex-col gap-4">
-                    {flowcharts.length === 0 && (
-                        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-8 text-center text-indigo-800 shadow-sm">
-                            No offline protocols are saved on the device. Go to Builder Mode to create and save one.
+        return (
+            <div className="flex justify-center w-full h-full p-8 overflow-y-auto">
+                <div className="w-full max-w-2xl mt-8">
+                    <h2 className="text-3xl font-extrabold text-slate-800 mb-2 tracking-tight">Triage Protocols</h2>
+                    <p className="text-slate-500 mb-8 font-medium">Select a protocol from the list to start a patient assessment.</p>
+
+                    {!isOnline && (
+                        <div className="mb-6 bg-slate-100 border border-slate-200 rounded-lg p-4 text-sm text-slate-700 font-medium">
+                            <span className="font-bold text-slate-800">Offline &mdash; showing cached data</span><br />
+                            {lastSynced ? `Last synced: ${new Date(lastSynced).toLocaleString()}` : ''}
                         </div>
                     )}
-                    {flowcharts.map(f => (
-                        <button
-                            key={f._id}
-                            onClick={() => startProtocol(f)}
-                            className="group bg-white border border-gray-200 rounded-xl p-6 text-left hover:border-indigo-500 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
-                        >
-                            <div className="flex-1">
-                                <h3 className="font-bold text-gray-900 text-lg mb-1 group-hover:text-indigo-600 transition-colors">📄 {f.name}</h3>
-                                <p className="text-sm text-gray-400 font-medium">Contains {f.nodes.length} decision nodes • Created {new Date(f.createdAt).toLocaleDateString()}</p>
+
+                    {!isOnline ? (
+                        <>
+                            {/* Offline View: Separated Sections */}
+                            <h3 className="text-xl font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">Expert Protocols</h3>
+                            <div className="flex flex-col gap-4 mb-8">
+                                {flowcharts.filter(f => f.isExpert).map(f => (
+                                    <button
+                                        key={f._id}
+                                        onClick={() => startProtocol(f)}
+                                        className="group bg-white border border-slate-200 rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
+                                    >
+                                        <div className="flex-1">
+                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
+                                            <p className="text-sm text-slate-400 font-medium">Expert System • Built-in • Cached</p>
+                                        </div>
+                                    </button>
+                                ))}
                             </div>
-                            <div className="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
+
+                            <h3 className="text-xl font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">My Saved Protocols</h3>
+                            <div className="flex flex-col gap-4">
+                                {flowcharts.filter(f => !f.isExpert).length === 0 && (
+                                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center text-slate-500 shadow-sm">
+                                        No cached custom protocols found.
+                                    </div>
+                                )}
+                                {flowcharts.filter(f => !f.isExpert).map(f => (
+                                    <button
+                                        key={f._id}
+                                        onClick={() => startProtocol(f)}
+                                        className="group bg-white border border-slate-200 rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
+                                    >
+                                        <div className="flex-1">
+                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
+                                            <p className="text-sm text-slate-400 font-medium">Contains {f.nodes.length} decision nodes • Cached</p>
+                                        </div>
+                                    </button>
+                                ))}
                             </div>
-                        </button>
-                    ))}
+                        </>
+                    ) : (
+                        <>
+                            {/* Online View: Combined */}
+                            <div className="flex flex-col gap-4">
+                                {flowcharts.map(f => (
+                                    <button
+                                        key={f._id}
+                                        onClick={() => startProtocol(f)}
+                                        className="group bg-white border border-slate-200 rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
+                                    >
+                                        <div className="flex-1">
+                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
+                                            <p className="text-sm text-slate-400 font-medium">
+                                                {f.isExpert ? 'Expert System • Built-in' : `Contains ${f.nodes?.length || 0} decision nodes • Created ${new Date(f.createdAt).toLocaleDateString()}`}
+                                            </p>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
-        </div>
-    )
+        )
+    }
 
     if (result) return (
         <div className="flex items-center justify-center h-full w-full bg-gray-50/50">
@@ -137,7 +214,7 @@ export default function NavigateMode() {
             <div className="w-full max-w-xl">
 
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
-                    <div className="text-sm font-semibold text-indigo-600 uppercase tracking-wider flex items-center gap-2">
+                    <div className="text-sm font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" /></svg>
                         {selected.name}
                     </div>
@@ -159,7 +236,7 @@ export default function NavigateMode() {
                         )}
                         {edges.map((edge, i) => (
                             <button key={i} onClick={() => handleAnswer(edge)}
-                                className="group relative border-2 border-indigo-100 bg-indigo-50/50 text-indigo-700 rounded-xl py-4 px-6 text-lg font-semibold hover:bg-indigo-600 hover:border-indigo-600 hover:text-white transition-all shadow-sm text-left flex justify-between items-center overflow-hidden">
+                                className="group relative border-2 border-slate-100 bg-slate-50/50 text-slate-700 rounded-xl py-4 px-6 text-lg font-semibold hover:bg-slate-600 hover:border-slate-600 hover:text-white transition-all shadow-sm text-left flex justify-between items-center overflow-hidden">
                                 <span className="relative z-10">{edge.label || `Option ${i + 1}`}</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity relative z-10 -mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
                             </button>
