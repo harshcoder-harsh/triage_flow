@@ -7,12 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/triageflow')
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
-// Flowchart Schema
 const nodeSchema = new mongoose.Schema({
   id: String,
   type: String,
@@ -57,8 +55,6 @@ const flowchartSchema = new mongoose.Schema({
 
 const Flowchart = mongoose.model('Flowchart', flowchartSchema);
 
-// Routes
-// Endpoint 1: Get All Flowcharts
 app.get('/api/flowcharts', async (req, res) => {
   try {
     const flowcharts = await Flowchart.find();
@@ -68,7 +64,6 @@ app.get('/api/flowcharts', async (req, res) => {
   }
 });
 
-// Endpoint 2: Get Single Flowchart
 app.get('/api/flowchart/:id', async (req, res) => {
   try {
     const flowchart = await Flowchart.findById(req.params.id);
@@ -79,7 +74,6 @@ app.get('/api/flowchart/:id', async (req, res) => {
   }
 });
 
-// Endpoint 3: Create Flowchart
 app.post('/api/flowchart', async (req, res) => {
   try {
     const { name, nodes, edges } = req.body;
@@ -91,7 +85,6 @@ app.post('/api/flowchart', async (req, res) => {
   }
 });
 
-// Endpoint 4: Update Flowchart
 app.put('/api/flowchart/:id', async (req, res) => {
   try {
     const { name, nodes, edges } = req.body;
@@ -107,7 +100,6 @@ app.put('/api/flowchart/:id', async (req, res) => {
   }
 });
 
-// Endpoint 5: Delete Flowchart
 app.delete('/api/flowchart/:id', async (req, res) => {
   try {
     const flowchart = await Flowchart.findByIdAndDelete(req.params.id);
@@ -118,7 +110,6 @@ app.delete('/api/flowchart/:id', async (req, res) => {
   }
 });
 
-// Endpoint 6: Navigate - Get Next Node (just for API spec, mostly handled on frontend)
 app.post('/api/flowchart/:id/navigate', async (req, res) => {
   try {
     const { currentNodeId, selectedEdgeTarget } = req.body;
