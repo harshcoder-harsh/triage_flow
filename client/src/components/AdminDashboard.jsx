@@ -109,13 +109,13 @@ export default function AdminDashboard({ isOnline }) {
                     <div className="flex gap-3">
                         <button
                             onClick={() => { setShowAddForm(true); setNewRole('doctor'); setCreateMsg(''); }}
-                            className="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition-colors"
+                            className="bg-[#0F172A] hover:opacity-90 transition text-white px-4 py-2 rounded-lg text-sm font-semibold"
                         >
                             + Add Doctor
                         </button>
                         <button
                             onClick={() => { setShowAddForm(true); setNewRole('nurse'); setCreateMsg(''); }}
-                            className="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-md text-sm font-semibold transition-colors"
+                            className="bg-white border border-[#E2E8F0] hover:bg-gray-50 transition text-[#0F172A] px-4 py-2 rounded-lg text-sm font-semibold"
                         >
                             + Add Nurse
                         </button>
@@ -132,19 +132,19 @@ export default function AdminDashboard({ isOnline }) {
 
                         <form onSubmit={handleAddStaff} className="grid grid-cols-4 gap-4 items-end">
                             <div>
-                                <label className="block text-xs font-semibold text-slate-600 mb-1">Name</label>
-                                <input required value={newName} onChange={e => setNewName(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-slate-500" placeholder="Jane Doe" />
+                                <label className="block text-xs font-semibold text-[#64748B] mb-1">Name</label>
+                                <input required value={newName} onChange={e => setNewName(e.target.value)} className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" placeholder="Jane Doe" />
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-slate-600 mb-1">Email</label>
-                                <input type="email" required value={newEmail} onChange={e => setNewEmail(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-slate-500" placeholder="jane@hospital.com" />
+                                <label className="block text-xs font-semibold text-[#64748B] mb-1">Email</label>
+                                <input type="email" required value={newEmail} onChange={e => setNewEmail(e.target.value)} className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" placeholder="jane@hospital.com" />
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-slate-600 mb-1">Password</label>
-                                <input required value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-slate-500" placeholder="••••••••" />
+                                <label className="block text-xs font-semibold text-[#64748B] mb-1">Password</label>
+                                <input required value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" placeholder="••••••••" />
                             </div>
                             <div>
-                                <button type="submit" className="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 rounded text-sm transition-colors">
+                                <button type="submit" className="w-full bg-[#0F172A] text-white rounded-lg hover:opacity-90 font-semibold py-3 text-sm transition-colors">
                                     Create {newRole === 'doctor' ? 'Doctor' : 'Nurse'}
                                 </button>
                             </div>
@@ -163,7 +163,7 @@ export default function AdminDashboard({ isOnline }) {
                 )}
 
                 {/* Staff Table */}
-                <div className="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
+                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl overflow-hidden">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 border-b border-gray-200">
@@ -208,10 +208,10 @@ export default function AdminDashboard({ isOnline }) {
 
             {/* SECTION 2 — Protocol Inventory */}
             <div className="max-w-5xl mx-auto">
-                <h2 className="text-2xl font-bold text-slate-800 tracking-tight mb-6">Protocol Inventory</h2>
+                <h2 className="text-2xl font-bold text-[#0F172A] tracking-tight mb-6">Protocol Inventory</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {protocols.map((p, idx) => (
-                        <div key={idx} className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow relative flex flex-col">
+                        <div key={idx} className="bg-white border border-[#E2E8F0] rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow relative flex flex-col">
                             <div className="flex justify-between items-start mb-2">
                                 <div>
                                     {p.isExpert ? (

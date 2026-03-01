@@ -157,7 +157,7 @@ export default function NavigateMode({ isOnline }) {
         return (
             <div className="flex justify-center w-full h-full p-8 overflow-y-auto">
                 <div className="w-full max-w-2xl mt-8">
-                    <h2 className="text-3xl font-extrabold text-slate-800 mb-2 tracking-tight">Triage Protocols</h2>
+                    <h2 className="text-3xl font-extrabold text-[#0F172A] mb-2 tracking-tight">Triage Protocols</h2>
                     <p className="text-slate-500 mb-8 font-medium">Select a protocol from the list to start a patient assessment.</p>
 
                     {isOffline && (
@@ -176,7 +176,7 @@ export default function NavigateMode({ isOnline }) {
                                     <button
                                         key={f._id}
                                         onClick={() => startProtocol(f)}
-                                        className="group bg-white border border-slate-200 rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
+                                        className="group bg-white border border-[#E2E8F0] rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
                                     >
                                         <div className="flex-1">
                                             <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
@@ -197,7 +197,7 @@ export default function NavigateMode({ isOnline }) {
                                     <button
                                         key={f._id}
                                         onClick={() => startProtocol(f)}
-                                        className="group bg-white border border-slate-200 rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
+                                        className="group bg-white border border-[#E2E8F0] rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
                                     >
                                         <div className="flex-1">
                                             <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
@@ -215,7 +215,7 @@ export default function NavigateMode({ isOnline }) {
                                     <button
                                         key={f._id}
                                         onClick={() => startProtocol(f)}
-                                        className="group bg-white border border-slate-200 rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
+                                        className="group bg-white border border-[#E2E8F0] rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
                                     >
                                         <div className="flex-1">
                                             <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
@@ -328,7 +328,7 @@ export default function NavigateMode({ isOnline }) {
                             <div className="mb-8 print:hidden">
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Nurse Notes & Observations</label>
                                 <textarea
-                                    className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-slate-500 focus:outline-none"
+                                    className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A] focus:outline-none"
                                     rows="4"
                                     placeholder="Add any additional patient details, symptoms, or actions taken..."
                                     value={notes}
@@ -359,7 +359,7 @@ export default function NavigateMode({ isOnline }) {
                                     <button
                                         onClick={submitReport}
                                         disabled={reportSubmitting}
-                                        className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow-md transition-colors flex items-center gap-2 disabled:opacity-70"
+                                        className="px-6 py-2.5 bg-[#0F172A] hover:opacity-90 text-white rounded-lg font-bold shadow-md transition-colors flex items-center gap-2 disabled:opacity-70"
                                     >
                                         {reportSubmitting ? 'Submitting...' : 'Submit Report'}
                                     </button>

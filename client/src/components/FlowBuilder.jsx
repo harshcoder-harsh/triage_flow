@@ -153,7 +153,7 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
 
                 <div className="mb-6">
                     <input
-                        className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 transition-shadow"
+                        className="w-full border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-[#0F172A] focus:ring-[#0F172A] transition-shadow"
                         value={flowchartName}
                         onChange={(e) => setFlowchartName(e.target.value)}
                         placeholder="E.g., Fever Triage Protocol"
@@ -185,7 +185,7 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
                     <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Category</label>
                     <div className="flex flex-col gap-2">
                         <select
-                            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 bg-white"
+                            className="w-full border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-[#0F172A] focus:ring-[#0F172A] bg-white"
                             value={categorySelect}
                             onChange={(e) => setCategorySelect(e.target.value)}
                         >
@@ -199,7 +199,7 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
                         <input
                             type="text"
                             placeholder="Or type custom category..."
-                            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 transition-shadow"
+                            className="w-full border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-[#0F172A] focus:ring-[#0F172A] transition-shadow"
                             value={customCategory}
                             onChange={(e) => setCustomCategory(e.target.value)}
                         />
@@ -213,13 +213,13 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
                             <button onClick={() => setSelectedNode(null)} className="text-gray-400 hover:text-gray-600">×</button>
                         </label>
                         <textarea
-                            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 mb-3 resize-none"
+                            className="w-full border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-[#0F172A] focus:ring-[#0F172A] mb-3 resize-none"
                             rows={3}
                             value={labelInput}
                             onChange={(e) => setLabelInput(e.target.value)}
                             placeholder="Question text..."
                         />
-                        <button onClick={updateNodeLabel} className="w-full bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm">
+                        <button onClick={updateNodeLabel} className="w-full bg-[#0F172A] hover:opacity-90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
                             Save Changes
                         </button>
                     </div>
@@ -235,7 +235,7 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
                             {isLocked ? '🔒 Locked (Published)' : '🔓 Unlocked (Draft)'}
                         </button>
                     </div>
-                    <button onClick={() => saveFlowchart(isLocked ? 'published' : 'draft')} className="w-full bg-slate-800 hover:bg-slate-700 text-white px-4 py-3 rounded-lg text-sm font-bold shadow-md transition-colors flex items-center justify-center gap-2">
+                    <button onClick={() => saveFlowchart(isLocked ? 'published' : 'draft')} className="w-full bg-[#0F172A] hover:opacity-90 text-white px-4 py-3 rounded-lg text-sm font-bold shadow-md transition-colors flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                         Save Protocol
                     </button>
@@ -260,9 +260,9 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
                                 onChange={e => setEdgeLabelInput(e.target.value)}
                                 onKeyDown={e => e.key === 'Enter' && confirmEdgeConnection()}
                             />
-                            <div className="flex gap-3 justify-end">
-                                <button onClick={cancelEdgeConnection} className="px-5 py-2.5 text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">Cancel</button>
-                                <button onClick={confirmEdgeConnection} className="px-5 py-2.5 text-sm font-bold text-white bg-slate-600 hover:bg-slate-700 rounded-lg transition-colors shadow-sm">Connect</button>
+                            <div className="flex justify-end gap-3 mt-4">
+                                <button onClick={cancelEdgeConnection} className="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">Cancel</button>
+                                <button onClick={confirmEdgeConnection} className="px-5 py-2.5 text-sm font-bold text-white bg-[#0F172A] hover:opacity-90 rounded-lg transition-colors shadow-sm">Connect</button>
                             </div>
                         </div>
                     </div>

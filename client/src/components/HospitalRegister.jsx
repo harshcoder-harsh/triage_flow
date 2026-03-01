@@ -1,22 +1,29 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Spline from '@splinetool/react-spline';
 
-// HospitalRegister Component
-export default function HospitalRegister({ onNavigateLogin }) {
+export default function HospitalRegister({ onNavigateLogin, onBack }) {
     const [hospitalName, setHospitalName] = useState('');
     const [location, setLocation] = useState('');
     const [adminName, setAdminName] = useState('');
     const [adminEmail, setAdminEmail] = useState('');
     const [adminPassword, setAdminPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-    // Handle hospital registration form submission
     const handleRegister = async (e) => {
         e.preventDefault();
         setErrorMsg('');
         setSuccessMsg('');
+
+        if (adminPassword !== confirmPassword) {
+            setErrorMsg('Passwords do not match');
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -34,6 +41,7 @@ export default function HospitalRegister({ onNavigateLogin }) {
             setAdminName('');
             setAdminEmail('');
             setAdminPassword('');
+            setConfirmPassword('');
         } catch (err) {
             setErrorMsg(err.response?.data?.message || 'Failed to register hospital.');
         } finally {
@@ -42,61 +50,84 @@ export default function HospitalRegister({ onNavigateLogin }) {
     };
 
     return (
-        <div className="flex h-screen items-center justify-center bg-gray-50">
-            <div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-md border border-gray-200">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Register Your Hospital</h1>
-                    <p className="text-sm text-slate-500 mt-1 font-medium">Create your administrative account to manage protocols and staff.</p>
-                </div>
+        <div className="flex h-screen w-full bg-[#0F172A] overflow-hidden">
+            {/* LEFT SIDE */}
+            <div className="w-1/2 h-full hidden lg:block">
+                <Spline scene="https://prod.spline.design/pillanddnaanimation-qU0rf7pHGYAgMw62TPgjJoRK/scene.splinecode" />
+            </div>
 
-                <form onSubmit={handleRegister} className="space-y-5">
-                    {errorMsg && (
-                        <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm border border-red-200 font-medium text-center">
-                            {errorMsg}
+            {/* RIGHT SIDE */}
+            <div className="w-full lg:w-1/2 h-full bg-white relative flex justify-center items-center overflow-y-auto">
+                <button onClick={onBack} className="absolute top-8 left-8 text-sm text-gray-400 hover:text-[#0F172A] transition">
+                    ← Login
+                </button>
+
+                <div className="w-full max-w-sm px-8 py-12">
+                    {successMsg ? (
+                        <div className="text-center">
+                            <div className="text-5xl text-green-600 mb-4 flex justify-center">✅</div>
+                            <h2 className="text-xl font-bold text-green-600">Hospital Registered!</h2>
+                            <p className="text-sm text-gray-500 mt-2">Your admin account has been created</p>
+
+                            <div className="bg-gray-50 rounded-lg p-4 mt-4 text-left border border-gray-200">
+                                <p className="text-sm text-[#0F172A]"><strong>Email:</strong> {adminEmail || 'admin@hospital.com'}</p>
+                                <p className="text-sm text-[#0F172A] mt-1"><strong>Password:</strong> ********</p>
+                                <p className="text-xs text-gray-500 mt-3">Save these credentials safely</p>
+                            </div>
+
+                            <button onClick={onNavigateLogin} className="w-full mt-6 bg-[#0F172A] text-white py-3 rounded-lg font-medium hover:opacity-90 transition">
+                                Go to Login →
+                            </button>
                         </div>
+                    ) : (
+                        <>
+                            <div>
+                                <h1 className="text-2xl font-bold text-[#0F172A]">Register Your Hospital</h1>
+                                <p className="text-sm text-[#64748B] mt-1">Get your clinic on TriageFlow</p>
+                            </div>
+
+                            <form onSubmit={handleRegister} className="mt-6 space-y-4">
+                                {errorMsg && (
+                                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-600 text-sm">
+                                        {errorMsg}
+                                    </div>
+                                )}
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="col-span-2">
+                                        <label className="block text-sm font-medium text-[#374151] mb-1">Hospital Name</label>
+                                        <input type="text" required className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" value={hospitalName} onChange={(e) => setHospitalName(e.target.value)} />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-sm font-medium text-[#374151] mb-1">Location</label>
+                                        <input type="text" required className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" value={location} onChange={(e) => setLocation(e.target.value)} />
+                                    </div>
+                                    <div className="col-span-2 mt-2 border-t border-gray-100 pt-2">
+                                        <label className="block text-sm font-medium text-[#374151] mb-1">Your Full Name</label>
+                                        <input type="text" required className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" value={adminName} onChange={(e) => setAdminName(e.target.value)} />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-sm font-medium text-[#374151] mb-1">Email Address</label>
+                                        <input type="email" required className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} />
+                                    </div>
+                                    <div className="col-span-2 relative">
+                                        <label className="block text-sm font-medium text-[#374151] mb-1">Password</label>
+                                        <input type={showPassword ? "text" : "password"} required className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} />
+                                        <button type="button" className="absolute right-3 top-[34px] text-sm text-gray-400 hover:text-[#0F172A]" onClick={() => setShowPassword(!showPassword)}>
+                                            {showPassword ? "Hide" : "Show"}
+                                        </button>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-sm font-medium text-[#374151] mb-1">Confirm Password</label>
+                                        <input type="password" required className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                    </div>
+                                </div>
+                                <button type="submit" disabled={loading} className="w-full bg-[#0F172A] hover:opacity-90 text-white py-3 rounded-lg font-medium transition-colors mt-2">
+                                    {loading ? 'Registering...' : 'Register Hospital'}
+                                </button>
+                            </form>
+                        </>
                     )}
-
-                    {successMsg && (
-                        <div className="bg-emerald-50 text-emerald-700 p-3 rounded-md text-sm border border-emerald-200 font-medium text-center">
-                            {successMsg}
-                        </div>
-                    )}
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-2">Hospital Name</label>
-                            <input type="text" required className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors" placeholder="City General" value={hospitalName} onChange={(e) => setHospitalName(e.target.value)} />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-2">Location</label>
-                            <input type="text" required className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors" placeholder="New York, NY" value={location} onChange={(e) => setLocation(e.target.value)} />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-2">Admin Name</label>
-                        <input type="text" required className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors" placeholder="Dr. John Smith" value={adminName} onChange={(e) => setAdminName(e.target.value)} />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-2">Admin Email</label>
-                        <input type="email" required className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors" placeholder="admin@hospital.com" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-2">Admin Password</label>
-                        <input type="password" required className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors" placeholder="••••••••" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} />
-                    </div>
-
-                    <button type="submit" disabled={loading} className="w-full mt-4 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-md transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
-                        {loading ? 'Registering...' : 'Register Hospital'}
-                    </button>
-                </form>
-
-                <div className="mt-6 text-center border-t border-gray-100 pt-6">
-                    <button onClick={onNavigateLogin} className="text-sm text-slate-500 hover:text-slate-800 font-medium transition-colors">
-                        Already registered? Login
-                    </button>
                 </div>
             </div>
         </div>

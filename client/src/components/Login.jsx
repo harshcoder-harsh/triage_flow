@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Spline from '@splinetool/react-spline';
 
-// Login Component
-export default function Login({ onLoginComplete, onNavigateRegister }) {
+export default function Login({ onLoginComplete, onNavigateRegister, onBack }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-    // Handles login flow
     const handleLogin = async (e) => {
         e.preventDefault();
         setErrorMsg('');
@@ -20,7 +20,6 @@ export default function Login({ onLoginComplete, onNavigateRegister }) {
                 password,
             });
 
-            // On success
             const { token, role, name, hospitalId } = response.data;
             localStorage.setItem('token', token);
             localStorage.setItem('role', role);
@@ -36,60 +35,84 @@ export default function Login({ onLoginComplete, onNavigateRegister }) {
     };
 
     return (
-        <div className="flex h-screen items-center justify-center bg-gray-50">
-            <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md border border-gray-200">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-slate-800 tracking-tight">🏥 TriageFlow</h1>
-                    <p className="text-sm text-slate-500 mt-1 font-medium">Healthcare Triage System</p>
-                </div>
+        <div className="flex h-screen w-full bg-[#0F172A] overflow-hidden">
+            {/* LEFT SIDE */}
+            <div className="w-1/2 h-full hidden lg:block opacity-80">
+                <Spline scene="https://prod.spline.design/pillanddnaanimation-qU0rf7pHGYAgMw62TPgjJoRK/scene.splinecode" />
+            </div>
 
-                <form onSubmit={handleLogin} className="space-y-6">
-                    {errorMsg && (
-                        <div className="bg-red-50 text-red-700 p-3 rounded-md text-sm border border-red-200 font-medium text-center">
-                            {errorMsg}
+            {/* RIGHT SIDE */}
+            <div className="w-full lg:w-1/2 h-full bg-white relative flex flex-col justify-center items-center">
+                <button
+                    onClick={onBack}
+                    className="absolute top-8 left-8 text-sm text-gray-400 hover:text-[#0F172A] transition"
+                >
+                    ← Back
+                </button>
+
+                <div className="w-full max-w-sm px-8">
+                    <div>
+                        <h1 className="text-2xl font-bold text-[#0F172A]">Welcome back</h1>
+                        <p className="text-sm text-[#64748B] mt-1">Sign in to TriageFlow</p>
+                    </div>
+
+                    <form onSubmit={handleLogin} className="mt-8 space-y-4">
+                        {errorMsg && (
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-600 text-sm">
+                                {errorMsg}
+                            </div>
+                        )}
+
+                        <div>
+                            <label className="block text-sm font-medium text-[#374151] mb-2">Email Address</label>
+                            <input
+                                type="email"
+                                required
+                                className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]"
+                                placeholder="doctor@clinic.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </div>
-                    )}
 
-                    <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
-                        <input
-                            type="email"
-                            required
-                            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors"
-                            placeholder="doctor@clinic.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
+                        <div>
+                            <label className="block text-sm font-medium text-[#374151] mb-2">Password</label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    required
+                                    className="w-full border border-[#E2E8F0] rounded-lg p-3 text-sm focus:outline-none focus:border-[#0F172A] focus:ring-1 focus:ring-[#0F172A]"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <button
+                                    type="button"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0F172A]"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? "Hide" : "Show"}
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-[#0F172A] hover:opacity-90 text-white font-medium py-3 rounded-lg transition-colors mt-6"
+                        >
+                            {loading ? 'Logging in...' : 'Login'}
+                        </button>
+                    </form>
+
+                    <div className="mt-6 text-center">
+                        <button
+                            onClick={onNavigateRegister}
+                            className="text-sm text-gray-400 hover:text-[#0F172A] transition"
+                        >
+                            Don't have an account? Register your hospital →
+                        </button>
                     </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-2">Password</label>
-                        <input
-                            type="password"
-                            required
-                            className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:border-slate-500 focus:ring-1 focus:ring-slate-500 transition-colors"
-                            placeholder="••••••••"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-md transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-                    >
-                        {loading ? 'Logging in...' : 'Login'}
-                    </button>
-                </form>
-
-                <div className="mt-8 text-center border-t border-gray-100 pt-6">
-                    <button
-                        onClick={onNavigateRegister}
-                        className="text-sm text-slate-500 hover:text-slate-800 font-medium transition-colors"
-                    >
-                        Register your hospital
-                    </button>
                 </div>
             </div>
         </div>

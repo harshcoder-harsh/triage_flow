@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNodesState, useEdgesState } from 'reactflow'
 import FlowBuilder from './components/FlowBuilder'
 import NavigateMode from './components/NavigateMode'
+import Landing from './pages/Landing'
 import Login from './components/Login'
 import HospitalRegister from './components/HospitalRegister'
 import AdminDashboard from './components/AdminDashboard'
@@ -28,7 +29,7 @@ const initialNodes = [
   }
 ]
 export default function App() {
-  const [mode, setMode] = useState('login')
+  const [mode, setMode] = useState('landing')
   const [user, setUser] = useState(null)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
@@ -95,12 +96,13 @@ export default function App() {
     setMode('login')
   }
 
-  if (mode === 'login') return <Login onLoginComplete={handleLoginComplete} onNavigateRegister={() => setMode('register')} />
-  if (mode === 'register') return <HospitalRegister onNavigateLogin={() => setMode('login')} />
+  if (mode === 'landing') return <Landing onLogin={() => setMode('login')} onRegister={() => setMode('register')} />
+  if (mode === 'login') return <Login onLoginComplete={handleLoginComplete} onNavigateRegister={() => setMode('register')} onBack={() => setMode('landing')} />
+  if (mode === 'register') return <HospitalRegister onNavigateLogin={() => setMode('login')} onBack={() => setMode('login')} />
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-gray-50">
-      <div className="bg-slate-800 text-white px-6 py-4 flex items-center justify-between shadow-md z-10">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#F8FAFC]">
+      <div className="bg-[#0F172A] text-white px-6 py-4 flex items-center justify-between shadow-md z-10">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -128,7 +130,7 @@ export default function App() {
           {user?.role === 'doctor' && (
             <button
               onClick={() => setMode('builder')}
-              className={`px-4 py-1.5 rounded-md font-medium transition-colors ${mode === 'builder' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-300 hover:bg-slate-700'}`}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${mode === 'builder' ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}
             >
               Builder Mode
             </button>
@@ -137,7 +139,7 @@ export default function App() {
           {/* Navigate Tab - All Roles */}
           <button
             onClick={() => setMode('navigate')}
-            className={`px-4 py-1.5 rounded-md font-medium transition-colors ${mode === 'navigate' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-300 hover:bg-slate-700'}`}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${mode === 'navigate' ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}
           >
             Navigate Protocol
           </button>
@@ -146,7 +148,7 @@ export default function App() {
           {user?.role === 'doctor' && (
             <button
               onClick={() => setMode('reports')}
-              className={`px-4 py-1.5 rounded-md font-medium transition-colors ${mode === 'reports' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-300 hover:bg-slate-700'}`}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${mode === 'reports' ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}
             >
               📋 Reports
             </button>
@@ -154,7 +156,7 @@ export default function App() {
 
           <button
             onClick={handleLogout}
-            className="ml-2 px-3 py-1.5 border border-slate-600 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:border-slate-400 hover:bg-slate-700 transition-colors"
+            className="ml-2 px-4 py-2 border border-white/20 rounded-lg text-sm font-medium text-white/70 hover:text-white hover:border-white/40 hover:bg-white/5 transition-colors"
           >
             Logout
           </button>
