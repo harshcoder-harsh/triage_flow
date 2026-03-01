@@ -1,4 +1,4 @@
-Live Demo Link- triage-flow-chi.vercel.app
+Live Demo Link- ** `https://triage-flow-qp7y.onrender.com](https://triage-flow-chi.vercel.app/`
 # TriageFlow
 **A dynamic, visual clinical protocol builder and patient assessment execution engine.**
 
@@ -92,7 +92,7 @@ Live Demo Link- triage-flow-chi.vercel.app
 *   **Live Demo Link:** [Insert Vercel Link here]
 *   **Backend API Link:** `https://triage-flow-qp7y.onrender.com`
 *   **Demo Video Link:** [Insert YouTube/Drive Link here]
-*   **GitHub Repository:** [Insert GitHub Link here]
+
 
 ## 13. Hackathon Deliverables Summary
 Delivered a fully functional, market-ready, visually stunning prototype featuring 3D web elements, a custom visual algorithm builder, deterministic logic execution, comprehensive RBAC security, and automated reporting.
