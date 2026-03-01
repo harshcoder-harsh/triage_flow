@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import expertData from '../data/expertFlowcharts.json'
+import { WifiOff, Star, HardDrive, FileText, CheckCircle2, Printer, ArrowLeft, ArrowRight, ClipboardList } from 'lucide-react'
 
 export default function NavigateMode({ isOnline }) {
     const [flowcharts, setFlowcharts] = useState([])
@@ -130,7 +131,7 @@ export default function NavigateMode({ isOnline }) {
         GREEN: 'bg-emerald-500 text-white',
     }
 
-    const priorityEmoji = { RED: '🔴', YELLOW: '🟡', GREEN: '🟢' }
+    const priorityEmoji = { RED: 'red', YELLOW: 'yellow', GREEN: 'green' }
 
     const outgoingEdges = selected?.edges?.filter(e => e.source === currentNode?.id) || [];
 
@@ -161,16 +162,16 @@ export default function NavigateMode({ isOnline }) {
                     <p className="text-slate-500 mb-8 font-medium">Select a protocol from the list to start a patient assessment.</p>
 
                     {isOffline && (
-                        <div className="bg-red-50 border border-red-200 rounded px-4 py-2 mb-4 text-sm text-red-700">
-                            🔴 Offline — Showing cached data
-                            <span className="text-gray-400 ml-2">Last synced: {lastSynced}</span>
+                        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-6 text-sm text-red-700 flex items-center justify-between shadow-sm">
+                            <span className="flex items-center gap-2 font-medium"><WifiOff className="w-4 h-4" /> Offline Mode — Showing Cached Data</span>
+                            <span className="text-red-500 text-xs font-semibold bg-white px-2 py-1 rounded-md border border-red-100">Last synced: {lastSynced}</span>
                         </div>
                     )}
 
                     {isOffline ? (
                         <>
                             {/* Offline View: Separated Sections */}
-                            <p className="font-semibold text-gray-500 text-sm mb-2">⭐ EXPERT PROTOCOLS</p>
+                            <p className="font-semibold text-gray-500 text-sm mb-3 flex items-center gap-2 uppercase tracking-wide"><Star className="w-4 h-4 text-blue-500" /> Expert Protocols</p>
                             <div className="flex flex-col gap-4 mb-8">
                                 {expertFlowchartsList.map(f => (
                                     <button
@@ -179,14 +180,15 @@ export default function NavigateMode({ isOnline }) {
                                         className="group bg-white border border-[#E2E8F0] rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
                                     >
                                         <div className="flex-1">
-                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
-                                            <p className="text-sm text-slate-400 font-medium">Expert System • Built-in • Cached</p>
+                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#0F172A] transition-colors flex items-center gap-2"><FileText className="w-5 h-5 text-slate-400" /> {f.name}</h3>
+                                            <p className="text-sm text-slate-400 font-medium ml-7">Expert System • Built-in • Cached</p>
                                         </div>
+                                        <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 transition-colors" />
                                     </button>
                                 ))}
                             </div>
 
-                            <p className="font-semibold text-gray-500 text-sm mt-4 mb-2">💾 CACHED PROTOCOLS</p>
+                            <p className="font-semibold text-gray-500 text-sm mt-6 mb-3 flex items-center gap-2 uppercase tracking-wide"><HardDrive className="w-4 h-4 text-emerald-500" /> Cached Protocols</p>
                             <div className="flex flex-col gap-4">
                                 {cachedFlowcharts.length === 0 && (
                                     <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center text-slate-500 shadow-sm">
@@ -200,9 +202,10 @@ export default function NavigateMode({ isOnline }) {
                                         className="group bg-white border border-[#E2E8F0] rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
                                     >
                                         <div className="flex-1">
-                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
-                                            <p className="text-sm text-slate-400 font-medium">Contains {f.nodes?.length || 0} decision nodes • Cached</p>
+                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#0F172A] transition-colors flex items-center gap-2"><FileText className="w-5 h-5 text-slate-400" /> {f.name}</h3>
+                                            <p className="text-sm text-slate-400 font-medium ml-7">Contains {f.nodes?.length || 0} decision nodes • Cached</p>
                                         </div>
+                                        <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 transition-colors" />
                                     </button>
                                 ))}
                             </div>
@@ -218,11 +221,12 @@ export default function NavigateMode({ isOnline }) {
                                         className="group bg-white border border-[#E2E8F0] rounded-xl p-6 text-left hover:border-slate-400 hover:shadow-md transition-all relative overflow-hidden flex items-center justify-between"
                                     >
                                         <div className="flex-1">
-                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-slate-700 transition-colors">📄 {f.name}</h3>
-                                            <p className="text-sm text-slate-400 font-medium">
+                                            <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-[#0F172A] transition-colors flex items-center gap-2"><FileText className="w-5 h-5 text-slate-400" /> {f.name}</h3>
+                                            <p className="text-sm text-slate-400 font-medium ml-7">
                                                 {f.isExpert ? 'Expert System • Built-in' : `Contains ${f.nodes?.length || 0} decision nodes • Created ${new Date(f.createdAt).toLocaleDateString()}`}
                                             </p>
                                         </div>
+                                        <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 transition-colors" />
                                     </button>
                                 ))}
                             </div>
@@ -277,24 +281,24 @@ export default function NavigateMode({ isOnline }) {
         const recommendation = result.data.priority === 'RED' ? 'IMMEDIATE EMERGENCY RESPONSE REQUIRED. Page doctor on call.' : result.data.priority === 'YELLOW' ? 'Admit to ward for observation. Monitor vitals every 30 mins.' : 'Discharge with home care instructions.'
 
         return (
-            <div className="flex justify-center w-full h-full p-4 md:p-8 overflow-y-auto bg-gray-50/50">
-                <div className="w-full max-w-3xl print:w-full print:max-w-none print:shadow-none bg-white shadow-xl rounded-2xl border border-gray-100 overflow-hidden">
-                    <div className={`p-6 text-white ${badgeStyle[result.data.priority]} print:bg-transparent print:text-black print:border-b-2 print:border-black`}>
+            <div className="flex justify-center w-full h-full p-4 md:p-8 overflow-y-auto bg-gray-50/50 absolute inset-0 print:static print:h-auto print:overflow-visible print:bg-white print:p-0">
+                <div className="w-full max-w-3xl print:w-full print:max-w-none print:shadow-none bg-white shadow-xl rounded-2xl border border-gray-100 overflow-hidden my-auto h-auto min-h-min mb-12 print:my-0 print:mb-0 print:border-none print:rounded-none">
+                    <div className={`p-6 text-white ${badgeStyle[result.data.priority]} print:bg-transparent print:text-black print:border-b-2 print:border-black print:p-0 print:pb-4 print:mb-6`}>
                         <div className="flex justify-between items-start">
                             <div>
                                 <h1 className="text-2xl font-bold mb-1">Patient Assessment Report</h1>
                                 <p className="opacity-90 font-medium">{selected.name} Protocol</p>
                             </div>
                             <div className="text-right">
-                                <span className="inline-block px-3 py-1 bg-white/20 rounded-lg text-sm font-bold tracking-wider uppercase backdrop-blur-sm print:border print:border-black">
+                                <span className="inline-block px-3 py-1 bg-white/20 rounded-lg text-sm font-bold tracking-wider uppercase backdrop-blur-sm print:border print:border-black print:text-black print:bg-white">
                                     {result.data.priority} OUTCOME
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="p-6 md:p-8">
-                        <div className="grid grid-cols-2 text-sm text-gray-600 mb-8 border-b border-gray-100 pb-6">
+                    <div className="p-6 md:p-8 print:p-0">
+                        <div className="grid grid-cols-2 text-sm text-gray-600 mb-8 border-b border-gray-100 pb-6 print:border-black/20">
                             <div>
                                 <p><strong className="text-gray-900">Assessed by:</strong> {nurseName}</p>
                                 <p className="mt-2"><strong className="text-gray-900">Date/Time:</strong> {new Date().toLocaleString()}</p>
@@ -336,8 +340,8 @@ export default function NavigateMode({ isOnline }) {
                                 />
                             </div>
                         ) : (
-                            <div className="mb-8 p-4 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg font-medium print:hidden">
-                                ✅ Report successfully saved to backend!
+                            <div className="mb-8 p-4 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg font-medium print:hidden flex items-center gap-2 shadow-sm">
+                                <CheckCircle2 className="w-5 h-5" /> Report successfully saved to backend!
                             </div>
                         )}
 
@@ -351,9 +355,9 @@ export default function NavigateMode({ isOnline }) {
                             <div className="flex-1 flex gap-3 justify-end">
                                 <button
                                     onClick={() => window.print()}
-                                    className="flex items-center gap-2 px-6 py-2.5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg font-bold transition-colors"
+                                    className="flex items-center gap-2 px-6 py-2.5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg font-bold transition-colors border border-slate-200 shadow-sm"
                                 >
-                                    🖨️ Print Report
+                                    <Printer className="w-4 h-4" /> Print Report
                                 </button>
                                 {!reportSuccess && (
                                     <button
@@ -380,7 +384,7 @@ export default function NavigateMode({ isOnline }) {
 
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
                     <div className="text-sm font-semibold text-slate-600 uppercase tracking-wider flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" /></svg>
+                        <ClipboardList className="w-5 h-5" />
                         {selected.name}
                     </div>
                     <div className="text-xs font-bold text-gray-400 bg-gray-100 rounded-full px-3 py-1">
@@ -389,7 +393,7 @@ export default function NavigateMode({ isOnline }) {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-10 w-full mb-6 relative overflow-hidden">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-10 leading-snug">
+                    <h2 className="text-2xl font-bold text-[#0F172A] mb-8 leading-snug">
                         {currentNode?.data.label}
                     </h2>
 
@@ -398,9 +402,10 @@ export default function NavigateMode({ isOnline }) {
                             <button
                                 key={i}
                                 onClick={() => handleAnswer(edge)}
-                                className="w-full border-2 border-blue-300 text-blue-700 rounded-xl py-4 text-lg font-medium hover:bg-blue-50 mb-3"
+                                className="w-full bg-[#0F172A] text-white hover:opacity-90 rounded-xl py-4 text-lg font-bold shadow-md transition-all flex items-center justify-between px-6"
                             >
-                                {edge.label}
+                                <span>{edge.label}</span>
+                                <ArrowRight className="w-5 h-5 opacity-70" />
                             </button>
                         ))}
                     </div>
@@ -409,8 +414,8 @@ export default function NavigateMode({ isOnline }) {
                 <div className="flex justify-between items-center px-2">
                     {history.length > 0 ? (
                         <button onClick={() => { setCurrentNode(history[history.length - 1].node); setHistory(h => h.slice(0, -1)) }}
-                            className="text-sm font-semibold text-gray-400 hover:text-gray-800 flex items-center gap-1 transition-colors px-2 py-1 -ml-2 rounded hover:bg-gray-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+                            className="text-sm font-semibold text-gray-500 hover:text-[#0F172A] flex items-center gap-1.5 transition-colors px-3 py-1.5 -ml-2 rounded-lg hover:bg-gray-100">
+                            <ArrowLeft className="w-4 h-4" />
                             Step Back
                         </button>
                     ) : <div></div>}

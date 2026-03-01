@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
-import Spline from '@splinetool/react-spline';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+
 
 export default function Login({ onLoginComplete, onNavigateRegister, onBack }) {
     const [email, setEmail] = useState('');
@@ -38,18 +39,17 @@ export default function Login({ onLoginComplete, onNavigateRegister, onBack }) {
         <div className="flex h-screen w-full bg-[#0F172A] overflow-hidden">
             {/* LEFT SIDE */}
             <div className="w-1/2 h-full hidden lg:block opacity-80">
-                <Spline scene="https://prod.spline.design/pillanddnaanimation-qU0rf7pHGYAgMw62TPgjJoRK/scene.splinecode" />
+                <iframe src="https://my.spline.design/pillanddnaanimation-qU0rf7pHGYAgMw62TPgjJoRK/" frameBorder="0" width="100%" height="100%"></iframe>
             </div>
 
             {/* RIGHT SIDE */}
             <div className="w-full lg:w-1/2 h-full bg-white relative flex flex-col justify-center items-center">
                 <button
                     onClick={onBack}
-                    className="absolute top-8 left-8 text-sm text-gray-400 hover:text-[#0F172A] transition"
+                    className="absolute top-8 left-8 text-sm text-gray-400 hover:text-[#0F172A] transition flex items-center gap-1.5 font-medium"
                 >
-                    ← Back
+                    <ArrowLeft className="w-4 h-4" /> Back
                 </button>
-
                 <div className="w-full max-w-sm px-8">
                     <div>
                         <h1 className="text-2xl font-bold text-[#0F172A]">Welcome back</h1>
@@ -105,14 +105,9 @@ export default function Login({ onLoginComplete, onNavigateRegister, onBack }) {
                         </button>
                     </form>
 
-                    <div className="mt-6 text-center">
-                        <button
-                            onClick={onNavigateRegister}
-                            className="text-sm text-gray-400 hover:text-[#0F172A] transition"
-                        >
-                            Don't have an account? Register your hospital →
-                        </button>
-                    </div>
+                    <p className="text-sm text-gray-400 mt-8 text-center flex items-center justify-center gap-1.5">
+                        Not registered? <button onClick={onNavigateRegister} className="text-[#0F172A] font-bold hover:underline flex items-center gap-1">Register Clinic <ArrowRight className="w-4 h-4" /></button>
+                    </p>
                 </div>
             </div>
         </div>

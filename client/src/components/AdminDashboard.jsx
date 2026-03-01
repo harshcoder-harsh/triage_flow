@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Plus, Printer, Copy, Trash2, Eye, Star, Building2, Play, Users, FileText, CheckCircle2 } from 'lucide-react';
 
 // AdminDashboard Component for managing Staff and view Protocols.
 export default function AdminDashboard({ isOnline }) {
@@ -14,6 +15,7 @@ export default function AdminDashboard({ isOnline }) {
     const [newEmail, setNewEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [createMsg, setCreateMsg] = useState('');
+    const [lastCreated, setLastCreated] = useState(null);
 
     // Password visibility tracking
     const [visiblePasswords, setVisiblePasswords] = useState({});
@@ -23,9 +25,9 @@ export default function AdminDashboard({ isOnline }) {
     }, [isOnline]);
 
     // Fetches both staff and protocols from the API
-    const fetchData = async () => {
+    const fetchData = async (background = false) => {
         try {
-            setLoading(true);
+            if (!background) setLoading(true);
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
 
@@ -48,6 +50,7 @@ export default function AdminDashboard({ isOnline }) {
     const handleAddStaff = async (e) => {
         e.preventDefault();
         setCreateMsg('');
+        setLastCreated(null);
         try {
             const token = localStorage.getItem('token');
             const res = await axios.post('http://localhost:5001/api/staff/create', {
@@ -60,8 +63,15 @@ export default function AdminDashboard({ isOnline }) {
             });
 
             setCreateMsg('Staff created successfully.');
-            // Add staff to end of list
-            setStaff([...staff, res.data.staff]);
+            setLastCreated({ name: newName, email: newEmail, role: newRole, plainPassword: newPassword });
+
+            // Clear inputs
+            setNewName('');
+            setNewEmail('');
+            setNewPassword('');
+
+            // Refetch without triggering full-page loader
+            fetchData(true);
 
             // Keep form open so admin can copy credentials from the inline form? 
             // Requirement: "show credentials modal with [Print] and [Copy]"
@@ -108,16 +118,16 @@ export default function AdminDashboard({ isOnline }) {
                     <h2 className="text-2xl font-bold text-slate-800 tracking-tight">Staff Management</h2>
                     <div className="flex gap-3">
                         <button
-                            onClick={() => { setShowAddForm(true); setNewRole('doctor'); setCreateMsg(''); }}
-                            className="bg-[#0F172A] hover:opacity-90 transition text-white px-4 py-2 rounded-lg text-sm font-semibold"
+                            onClick={() => { setShowAddForm(true); setNewRole('doctor'); setCreateMsg(''); setLastCreated(null); }}
+                            className="bg-[#0F172A] hover:opacity-90 transition text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2"
                         >
-                            + Add Doctor
+                            <Plus className="w-4 h-4" /> Add Doctor
                         </button>
                         <button
-                            onClick={() => { setShowAddForm(true); setNewRole('nurse'); setCreateMsg(''); }}
-                            className="bg-white border border-[#E2E8F0] hover:bg-gray-50 transition text-[#0F172A] px-4 py-2 rounded-lg text-sm font-semibold"
+                            onClick={() => { setShowAddForm(true); setNewRole('nurse'); setCreateMsg(''); setLastCreated(null); }}
+                            className="bg-white border border-[#E2E8F0] hover:bg-gray-50 transition text-[#0F172A] px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2"
                         >
-                            + Add Nurse
+                            <Plus className="w-4 h-4" /> Add Nurse
                         </button>
                     </div>
                 </div>
@@ -150,12 +160,14 @@ export default function AdminDashboard({ isOnline }) {
                             </div>
                         </form>
 
-                        {createMsg && (
-                            <div className="mt-4 p-4 rounded bg-emerald-50 border border-emerald-200 flex justify-between items-center">
-                                <span className="text-emerald-700 font-medium text-sm">{createMsg}</span>
+                        {createMsg && lastCreated && (
+                            <div className="mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex justify-between items-center">
+                                <span className="text-emerald-700 font-medium text-sm flex items-center gap-2">
+                                    <CheckCircle2 className="w-5 h-5" /> {createMsg}
+                                </span>
                                 <div className="flex gap-2">
-                                    <button onClick={() => window.print()} className="bg-white border border-emerald-300 text-emerald-700 px-3 py-1 rounded text-xs font-bold hover:bg-emerald-100 flex items-center gap-1">🖨️ Print</button>
-                                    <button onClick={() => handleCopyCredentials({ name: newName, email: newEmail, role: newRole, plainPassword: newPassword })} className="bg-white border border-emerald-300 text-emerald-700 px-3 py-1 rounded text-xs font-bold hover:bg-emerald-100 flex items-center gap-1">📋 Copy</button>
+                                    <button onClick={() => window.print()} className="bg-white border border-emerald-300 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-100 flex items-center gap-1.5 transition"><Printer className="w-3.5 h-3.5" /> Print</button>
+                                    <button onClick={() => handleCopyCredentials(lastCreated)} className="bg-white border border-emerald-300 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-100 flex items-center gap-1.5 transition"><Copy className="w-3.5 h-3.5" /> Copy</button>
                                 </div>
                             </div>
                         )}
@@ -187,16 +199,17 @@ export default function AdminDashboard({ isOnline }) {
                                     <td className="p-4 text-sm text-slate-600">{s.email}</td>
                                     <td className="p-4 text-sm text-slate-500 font-mono flex items-center gap-2">
                                         {visiblePasswords[s.email] ? s.plainPassword : '••••••••'}
-                                        <button onClick={() => togglePasswordVisibility(s.email)} className="text-xs text-slate-400 hover:text-slate-800 transition-colors">
-                                            [👁 Show]
+                                        <button onClick={() => togglePasswordVisibility(s.email)} className="text-xs text-slate-400 hover:text-slate-800 transition-colors flex items-center justify-center p-1 rounded-md hover:bg-slate-100">
+                                            {/* We previously replaced [Show] with <Eye> via sed, make it safe here */}
+                                            <Eye className="w-4 h-4" />
                                         </button>
                                     </td>
                                     <td className="p-4 text-right">
-                                        <button onClick={() => handleCopyCredentials(s)} className="text-slate-500 hover:text-slate-800 mr-4 font-medium text-xs transition-colors">
-                                            📋 Copy
+                                        <button onClick={() => handleCopyCredentials(s)} className="text-slate-500 hover:text-slate-800 mr-4 font-medium text-xs transition-colors inline-flex items-center gap-1">
+                                            <Copy className="w-3.5 h-3.5" /> Copy
                                         </button>
-                                        <button onClick={() => handleDeleteStaff(s._id)} className="text-red-500 hover:text-red-700 font-medium text-xs transition-colors">
-                                            🗑️ Remove
+                                        <button onClick={() => handleDeleteStaff(s._id)} className="text-red-500 hover:text-red-700 font-medium text-xs transition-colors inline-flex items-center gap-1">
+                                            <Trash2 className="w-3.5 h-3.5" /> Remove
                                         </button>
                                     </td>
                                 </tr>
@@ -215,18 +228,18 @@ export default function AdminDashboard({ isOnline }) {
                             <div className="flex justify-between items-start mb-2">
                                 <div>
                                     {p.isExpert ? (
-                                        <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-1 rounded inline-flex items-center gap-1 mb-2">⭐ Expert</span>
+                                        <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-1.5 rounded-md inline-flex items-center gap-1.5 mb-3 border border-blue-100"><Star className="w-3.5 h-3.5" /> Expert</span>
                                     ) : (
-                                        <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-1 rounded inline-flex items-center gap-1 mb-2">🏥 Hospital</span>
+                                        <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-1.5 rounded-md inline-flex items-center gap-1.5 mb-3 border border-emerald-100"><Building2 className="w-3.5 h-3.5" /> Hospital</span>
                                     )}
-                                    <h3 className="font-bold text-slate-900 text-lg leading-tight mb-1">{p.name}</h3>
+                                    <h3 className="font-bold text-[#0F172A] text-lg leading-tight mb-1">{p.name}</h3>
                                     <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">{p.category}</p>
                                 </div>
                             </div>
 
-                            <div className="mt-auto pt-5">
-                                <button className="w-full py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-md font-bold text-sm transition-colors flex justify-center items-center gap-2">
-                                    ▶ Use Protocol
+                            <div className="mt-auto pt-6">
+                                <button className="w-full py-2.5 bg-slate-50 hover:bg-slate-100 border border-[#E2E8F0] text-[#0F172A] rounded-lg font-bold text-sm transition-colors flex justify-center items-center gap-2 group">
+                                    <Play className="w-4 h-4 group-hover:scale-110 transition-transform" /> Use Protocol
                                 </button>
                             </div>
                         </div>

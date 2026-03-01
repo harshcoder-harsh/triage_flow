@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { FileText, Stethoscope } from 'lucide-react'
 import { useNodesState, useEdgesState } from 'reactflow'
 import FlowBuilder from './components/FlowBuilder'
 import NavigateMode from './components/NavigateMode'
@@ -10,13 +11,16 @@ import ReportInbox from './components/ReportInbox'
 import axios from 'axios'
 
 const defaultNodeStyle = {
-  background: '#fff',
-  border: '2px solid #1e293b',
-  borderRadius: '12px',
-  padding: '16px',
-  width: '180px',
-  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-  fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+  background: '#ffffff',
+  border: '2px solid #E2E8F0',
+  borderRadius: '16px',
+  padding: '24px',
+  width: '240px',
+  boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05)',
+  fontFamily: '"Outfit", sans-serif',
+  color: '#0F172A',
+  fontWeight: '600',
+  fontSize: '15px',
 }
 
 const initialNodes = [
@@ -105,9 +109,7 @@ export default function App() {
       <div className="bg-[#0F172A] text-white px-6 py-4 flex items-center justify-between shadow-md z-10">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
+            <Stethoscope className="w-6 h-6 text-emerald-400" />
             <h1 className="text-xl font-bold tracking-wide">TriageFlow</h1>
           </div>
 
@@ -150,7 +152,7 @@ export default function App() {
               onClick={() => setMode('reports')}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${mode === 'reports' ? 'bg-white/10 text-white' : 'text-white/70 hover:bg-white/5 hover:text-white'}`}
             >
-              📋 Reports
+              <FileText className="w-4 h-4 inline mr-1" /> Reports
             </button>
           )}
 

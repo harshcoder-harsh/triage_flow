@@ -7,18 +7,22 @@ import ReactFlow, {
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 import axios from 'axios'
+import { Plus, CircleAlert, Activity, HeartPulse, Lock, Unlock, HardDriveDownload } from 'lucide-react'
 
 const nodeTypes = {}
 const edgeTypes = {}
 
 const defaultNodeStyle = {
-    background: '#fff',
-    border: '2px solid #1e293b',
-    borderRadius: '12px',
-    padding: '16px',
-    width: '180px',
-    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-    fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+    background: '#ffffff',
+    border: '2px solid #E2E8F0',
+    borderRadius: '16px',
+    padding: '24px',
+    width: '240px',
+    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05)',
+    fontFamily: '"Outfit", sans-serif',
+    color: '#0F172A',
+    fontWeight: '600',
+    fontSize: '15px',
 }
 
 const initialNodes = [
@@ -75,9 +79,9 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
 
     const addOutcomeNode = (priorityType) => {
         const styles = {
-            RED: { bg: '#FEF2F2', border: '#EF4444', text: '🔴 Emergency' },
-            YELLOW: { bg: '#FFFBEB', border: '#F59E0B', text: '🟡 Monitor' },
-            GREEN: { bg: '#F0FDF4', border: '#10B981', text: '🟢 Home Care' },
+            RED: { bg: '#FEF2F2', border: '#EF4444', text: 'Emergency' },
+            YELLOW: { bg: '#FFFBEB', border: '#F59E0B', text: 'Monitor' },
+            GREEN: { bg: '#F0FDF4', border: '#10B981', text: 'Home Care' },
         }
         const c = styles[priorityType]
         const newNode = {
@@ -163,19 +167,19 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
                 <div className="mb-6">
                     <label className="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Add Components</label>
                     <div className="flex flex-col gap-2">
-                        <button onClick={addQuestionNode} className="flex items-center justify-center gap-2 bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                        <button onClick={addQuestionNode} className="flex items-center justify-center gap-2 bg-[#0F172A] text-white hover:opacity-90 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all w-full">
+                            <Plus className="w-4 h-4" />
                             Standard Question
                         </button>
                         <div className="grid grid-cols-1 gap-2 mt-2">
-                            <button onClick={() => addOutcomeNode('RED')} className="bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left flex items-center">
-                                <span className="mr-2">🔴</span> Emergency Outcome
+                            <button onClick={() => addOutcomeNode('RED')} className="bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all text-left flex items-center gap-2 w-full">
+                                <CircleAlert className="w-4 h-4" /> Emergency Outcome
                             </button>
-                            <button onClick={() => addOutcomeNode('YELLOW')} className="bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left flex items-center">
-                                <span className="mr-2">🟡</span> Monitor Outcome
+                            <button onClick={() => addOutcomeNode('YELLOW')} className="bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all text-left flex items-center gap-2 w-full">
+                                <Activity className="w-4 h-4" /> Monitor Outcome
                             </button>
-                            <button onClick={() => addOutcomeNode('GREEN')} className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left flex items-center">
-                                <span className="mr-2">🟢</span> Home Care Outcome
+                            <button onClick={() => addOutcomeNode('GREEN')} className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 px-4 py-2.5 rounded-lg text-sm font-bold shadow-sm transition-all text-left flex items-center gap-2 w-full">
+                                <HeartPulse className="w-4 h-4" /> Home Care Outcome
                             </button>
                         </div>
                     </div>
@@ -230,13 +234,13 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
                         <span className="text-sm font-medium text-slate-700">Protocol Status</span>
                         <button
                             onClick={() => setIsLocked(!isLocked)}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${isLocked ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-200'}`}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${isLocked ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-200'}`}
                         >
-                            {isLocked ? '🔒 Locked (Published)' : '🔓 Unlocked (Draft)'}
+                            {isLocked ? <><Lock className="w-3.5 h-3.5" /> Published</> : <><Unlock className="w-3.5 h-3.5" /> Draft</>}
                         </button>
                     </div>
                     <button onClick={() => saveFlowchart(isLocked ? 'published' : 'draft')} className="w-full bg-[#0F172A] hover:opacity-90 text-white px-4 py-3 rounded-lg text-sm font-bold shadow-md transition-colors flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                        <HardDriveDownload className="w-5 h-5" />
                         Save Protocol
                     </button>
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
-import Spline from '@splinetool/react-spline';
+import { CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
+
 
 export default function HospitalRegister({ onNavigateLogin, onBack }) {
     const [hospitalName, setHospitalName] = useState('');
@@ -53,19 +54,21 @@ export default function HospitalRegister({ onNavigateLogin, onBack }) {
         <div className="flex h-screen w-full bg-[#0F172A] overflow-hidden">
             {/* LEFT SIDE */}
             <div className="w-1/2 h-full hidden lg:block">
-                <Spline scene="https://prod.spline.design/pillanddnaanimation-qU0rf7pHGYAgMw62TPgjJoRK/scene.splinecode" />
+                <iframe src="https://my.spline.design/pillanddnaanimation-qU0rf7pHGYAgMw62TPgjJoRK/" frameBorder="0" width="100%" height="100%"></iframe>
             </div>
 
             {/* RIGHT SIDE */}
             <div className="w-full lg:w-1/2 h-full bg-white relative flex justify-center items-center overflow-y-auto">
-                <button onClick={onBack} className="absolute top-8 left-8 text-sm text-gray-400 hover:text-[#0F172A] transition">
-                    ← Login
+                <button onClick={onBack} className="absolute top-8 left-8 text-sm text-gray-400 hover:text-[#0F172A] transition flex items-center gap-1.5 font-medium">
+                    <ArrowLeft className="w-4 h-4" /> Login
                 </button>
 
                 <div className="w-full max-w-sm px-8 py-12">
                     {successMsg ? (
                         <div className="text-center">
-                            <div className="text-5xl text-green-600 mb-4 flex justify-center">✅</div>
+                            <div className="text-green-600 mb-4 flex justify-center">
+                                <CheckCircle2 className="w-16 h-16" />
+                            </div>
                             <h2 className="text-xl font-bold text-green-600">Hospital Registered!</h2>
                             <p className="text-sm text-gray-500 mt-2">Your admin account has been created</p>
 
@@ -75,8 +78,8 @@ export default function HospitalRegister({ onNavigateLogin, onBack }) {
                                 <p className="text-xs text-gray-500 mt-3">Save these credentials safely</p>
                             </div>
 
-                            <button onClick={onNavigateLogin} className="w-full mt-6 bg-[#0F172A] text-white py-3 rounded-lg font-medium hover:opacity-90 transition">
-                                Go to Login →
+                            <button onClick={onNavigateLogin} className="w-full mt-6 bg-[#0F172A] text-white py-3 rounded-lg font-medium hover:opacity-90 transition flex justify-center items-center gap-2">
+                                Go to Login <ArrowRight className="w-4 h-4" />
                             </button>
                         </div>
                     ) : (

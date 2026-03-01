@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { ArrowLeft } from 'lucide-react'
 
 export default function ReportInbox({ doctorHospitalId }) {
     const [reports, setReports] = useState([])
@@ -37,8 +38,8 @@ export default function ReportInbox({ doctorHospitalId }) {
             <div className="flex justify-center w-full h-full p-4 md:p-8 overflow-y-auto bg-gray-50/50">
                 <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl border border-gray-100 overflow-hidden">
                     <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-slate-50">
-                        <button onClick={() => setSelectedReport(null)} className="text-sm font-bold text-slate-500 flex items-center gap-1 hover:text-slate-800 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+                        <button onClick={() => setSelectedReport(null)} className="text-sm font-bold text-slate-500 flex items-center gap-1.5 hover:text-slate-800 transition-colors">
+                            <ArrowLeft className="w-4 h-4" />
                             Back to Inbox
                         </button>
                         <span className={`px-3 py-1 rounded-full text-xs font-bold border uppercase tracking-wider ${badgeStyle[selectedReport.outcome]}`}>

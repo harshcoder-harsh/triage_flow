@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ReportSchema = new mongoose.Schema({
   protocolName: String,
-  protocolId: mongoose.Schema.Types.ObjectId,
+  protocolId: String, // Expert protocols use string IDs (e.g. 'exp-1')
   nurseId: mongoose.Schema.Types.ObjectId,
   nurseName: String,
   hospitalId: mongoose.Schema.Types.ObjectId,

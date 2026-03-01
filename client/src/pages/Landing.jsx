@@ -1,12 +1,12 @@
 import React from 'react';
-import Spline from '@splinetool/react-spline';
+import { CheckCircle2 } from 'lucide-react';
 
 export default function Landing({ onLogin, onRegister }) {
     return (
         <div className="flex h-screen w-full bg-[#0F172A] overflow-hidden">
             {/* LEFT SIDE */}
             <div className="w-1/2 h-full hidden lg:block">
-                <Spline scene="https://prod.spline.design/pillanddnaanimation-qU0rf7pHGYAgMw62TPgjJoRK/scene.splinecode" />
+                <iframe src="https://my.spline.design/pillanddnaanimation-qU0rf7pHGYAgMw62TPgjJoRK/" frameBorder="0" width="100%" height="100%"></iframe>
             </div>
 
             {/* RIGHT SIDE */}
@@ -21,15 +21,15 @@ export default function Landing({ onLogin, onRegister }) {
                     {/* Feature highlights */}
                     <div className="mt-8 space-y-3">
                         <div className="flex items-center gap-3">
-                            <span className="text-[#0F172A]">✅</span>
+                            <CheckCircle2 className="text-[#0F172A] w-5 h-5" />
                             <span className="text-sm text-[#374151]">Offline-First — Works without internet</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <span className="text-[#0F172A]">✅</span>
+                            <CheckCircle2 className="text-[#0F172A] w-5 h-5" />
                             <span className="text-sm text-[#374151]">Role-Based — Doctors & Nurses</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <span className="text-[#0F172A]">✅</span>
+                            <CheckCircle2 className="text-[#0F172A] w-5 h-5" />
                             <span className="text-sm text-[#374151]">Expert Protocols — Medically verified</span>
                         </div>
                     </div>
