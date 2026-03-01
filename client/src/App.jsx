@@ -1,3 +1,4 @@
+import { API_BASE_URL } from './config';
 import { useState, useEffect } from 'react'
 import { FileText, Stethoscope } from 'lucide-react'
 import { useNodesState, useEdgesState } from 'reactflow'
@@ -46,7 +47,7 @@ export default function App() {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const r = await axios.get('http://localhost:5001/api/flowcharts', {
+          const r = await axios.get(`${API_BASE_URL}/api/flowcharts`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           localStorage.setItem('cached_flowcharts', JSON.stringify(r.data));

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ArrowLeft } from 'lucide-react'
@@ -12,7 +13,7 @@ export default function ReportInbox({ doctorHospitalId }) {
         const fetchReports = async () => {
             try {
                 const token = localStorage.getItem('token')
-                const r = await axios.get(`http://localhost:5001/api/reports?hospitalId=${doctorHospitalId}`, {
+                const r = await axios.get(`${API_BASE_URL}/api/reports?hospitalId=${doctorHospitalId}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 setReports(r.data)

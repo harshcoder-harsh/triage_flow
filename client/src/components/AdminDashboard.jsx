@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, Printer, Copy, Trash2, Eye, Star, Building2, Play, Users, FileText, CheckCircle2 } from 'lucide-react';
@@ -33,8 +34,8 @@ export default function AdminDashboard({ isOnline }) {
 
             // Make concurrent API calls
             const [staffReq, flowchartsReq] = await Promise.all([
-                axios.get('http://localhost:5001/api/staff', { headers }),
-                axios.get('http://localhost:5001/api/flowcharts', { headers })
+                axios.get(`${API_BASE_URL}/api/staff`, { headers }),
+                axios.get(`${API_BASE_URL}/api/flowcharts`, { headers })
             ]);
 
             setStaff(staffReq.data);
@@ -53,7 +54,7 @@ export default function AdminDashboard({ isOnline }) {
         setLastCreated(null);
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.post('http://localhost:5001/api/staff/create', {
+            const res = await axios.post(`${API_BASE_URL}/api/staff/create`, {
                 name: newName,
                 email: newEmail,
                 password: newPassword,
@@ -98,7 +99,7 @@ export default function AdminDashboard({ isOnline }) {
         if (!window.confirm('Are you sure you want to remove this staff member?')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5001/api/staff/${id}`, {
+            await axios.delete(`${API_BASE_URL}/api/staff/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setStaff(staff.filter(s => s._id !== id));

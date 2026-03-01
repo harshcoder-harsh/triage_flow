@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import expertData from '../data/expertFlowcharts.json'
@@ -35,7 +36,7 @@ export default function NavigateMode({ isOnline }) {
         if (navigator.onLine) {
             try {
                 // Fetch fresh data from API
-                const res = await axios.get('http://localhost:5001/api/flowcharts', {
+                const res = await axios.get(`${API_BASE_URL}/api/flowcharts`, {
                     headers: { Authorization: `Bearer ${token}` }
                 })
 
@@ -260,7 +261,7 @@ export default function NavigateMode({ isOnline }) {
                 createdAt: new Date().toISOString()
             }
 
-            await axios.post('http://localhost:5001/api/report', reportData, {
+            await axios.post(`${API_BASE_URL}/api/report`, reportData, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             setReportSuccess(true)

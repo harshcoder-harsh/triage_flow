@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -18,7 +19,7 @@ export default function Register({ onBackToLogin }) {
         setLoading(true);
 
         try {
-            await axios.post('http://localhost:5001/api/auth/register', {
+            await axios.post(`${API_BASE_URL}/api/auth/register`, {
                 name,
                 email,
                 password,

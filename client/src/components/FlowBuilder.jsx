@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../config';
 import { useCallback, useState } from 'react'
 import ReactFlow, {
     addEdge,
@@ -117,7 +118,7 @@ export default function FlowBuilder({ nodes, setNodes, onNodesChange, edges, set
         try {
             const token = localStorage.getItem('token');
             if (nodes.length === 0) throw new Error("Add at least one node");
-            await axios.post('http://localhost:5001/api/flowchart', {
+            await axios.post(`${API_BASE_URL}/api/flowchart`, {
                 name: flowchartName,
                 category: customCategory.trim() || categorySelect,
                 status,
