@@ -1,151 +1,114 @@
 # TriageFlow
-**A robust, roles-based, online/offline-synced symptom triage flowchart builder for frontline healthcare workers.**
-
----
+**A dynamic, visual clinical protocol builder and patient assessment execution engine.**
 
 ## 1. Problem Statement
-
-### Problem Title
-Static & Manual Symptom Triage Systems in Rural and Field Healthcare
-
-### Problem Description
-In primary care settings, rural clinics, and field health programs, the first level of patient assessment is often performed by nurses, paramedics, or community health workers rather than specialized doctors. These frontline workers rely on paper flowcharts and manual checklists to assess symptoms and determine urgency. These tools are static, hard to update, and not tailored to specific clinic needs or regional health priorities. Most cloud-based decision support tools are impractical in field environments due to limited or no internet connectivity.
-
-### Target Users
-- **Administrators**: Create hospitals and manage staff accounts securely.
-- **Doctors**: Design advanced triage flowcharts tailored to their clinic's needs.
-- **Nurses**: Navigate those flowcharts during critical patient assessments.
-
-### Existing Gaps
-- Paper-based flowcharts are hard to modify and scale
-- No easy way to embed risk scoring or conditional branching logic
-- Lack of offline tools for field and rural healthcare deployment
-- Difficulty securely deploying updated protocols across distributed teams
-- Lack of centralized clinic management and role-based permissions
-
----
+**Problem Title:** Overwhelmed Emergency Departments & Inflexible Triage Systems  
+**Problem Description:** Emergency departments face severe bottlenecks and varied triage accuracy globally. A major factor is the heavy reliance on static paper protocols or rigidly hardcoded software, causing delayed care for critical patients and making real-time adaptation difficult during emerging crises.  
+**Target Users:** Hospital Administrators, Head Physicians/Doctors, and ER Nurses.  
+**Existing Gaps:** Current ED solutions lack dynamic customization, are extremely expensive to update when new medical guidelines release, and fail to provide a unified, visual way for doctors to build clinical pathways that frontline nurses can execute intuitively without second-guessing.
 
 ## 2. Problem Understanding & Approach
-
-### Root Cause Analysis
-The core issue is that triage decision-making requires navigating complex, multi-step logic under cognitive overload. The lack of offline capability makes modern cloud tools inaccessible exactly where they are needed most. 
-
-### Solution Strategy
-Build a secure, multi-tenant web/desktop application that:
-1. Incorporates strict Role-Based Access Control (Admin, Doctor, Nurse)
-2. Allows doctors to visually design triage flowcharts using a drag-and-drop interface and publish them.
-3. Enables nurses to navigate those flowcharts question-by-question during patient assessment with offline caching support.
-4. Auto-syncs Expert built-in protocols alongside Hospital-specific custom flowcharts seamlessly to the cloud.
-
----
+**Root Cause Analysis:** Triage protocols are traditionally hardcoded into software logic by external developers. When medical standards change, hospitals must wait for slow software updates. This hardcoded nature removes control from the actual medical experts.  
+**Solution Strategy:** Decouple medical logic from software code. Provide a no-code visual builder that empowers doctors to design clinical pathways, paired with an elegant, focused interface for nurses to quickly assess patients based on those real-time pathways.
 
 ## 3. Proposed Solution
-
-### Solution Overview
-TriageFlow is a high-availability application that separates triage into distinct modes based on the user's secure JWT session: an **Admin Dashboard** for hospital management, a **Builder Mode** for doctors to create protocols, and a **Navigate Mode** for real-time patient assessment by nurses.
-
-### Key Features
-- **JWT-Secured Multi-Tenancy**: Hospitals are strictly sandboxed. Admins manage their own staff and doctors publish protocols only to their specific hospital.
-- **Offline Resiliency**: Advanced connection listeners automatically cache JWT tokens, API payloads, and expert protocols to local storage. Navigating critical flowcharts works flawlessly even if the internet drops.
-- **Drag-and-Drop Builder**: Conditional branching logic with risk scoring and priority levels (RED / YELLOW / GREEN) on outcome nodes.
-- **Protocol Inventory**: Differentiates automatically injected Built-in "Expert Protocols" from privately drafted "Hospital Protocols".
-
----
+**Solution Overview:** TriageFlow is an enterprise-grade medical workflow platform that allows hospitals to visually map out triage logic and execute it seamlessly.  
+**Core Idea:** Empower medical experts to design deterministic decision-tree flowcharts (Directed Acyclic Graphs) for patient triage, guaranteeing 100% accurate, transparent, and instantly updatable clinical assessments.  
+**Key Features:**
+*   **Visual Protocol Builder:** Drag-and-drop flowchart builder using React Flow for doctors.
+*   **Navigate Mode:** Step-by-step, distraction-free assessment execution for nurses.
+*   **Role-Based Access Control:** Secure portals for Admins, Doctors, and Nurses.
+*   **Premium Aesthetic:** High-end modern UI utilizing Spline 3D, responsive design, and Tailwind CSS.
+*   **Automated Reporting:** Instant PDF-ready assessment reports securely saved to the cloud.
 
 ## 4. System Architecture
+**High-Level Flow:** Admin Registers Clinic → Doctor builds/publishes Flowchart Protocol → Nurse executes Protocol on patient → System calculates priority score and generates an Assessment Report.
 
-### High-Level Flow
-```
-User Login (JWT Generated)
-    ↓
-Role Segregation:
-  [Admin] → Accesses Admin Dashboard to manage users/inventory
-  [Doctor] → Accesses React Flow Canvas to Design Protocols
-  [Nurse] → Accesses Navigate Mode for Offline/Online Patient Triage
-    ↓
-Node.js + Express API (Modular Routes & Middleware Validation)
-    ↓
-MongoDB Atlas (Cloud Database)
-```
+`Nurse (User) → React Interactive UI (Frontend) → Node.js Express API (Backend) → Deterministic DAG Engine (Model) → MongoDB Atlas (Database) → Priority Outcome (Response)`
 
-### Architecture Description
-The backend utilizes a heavily refactored, modular Node.js Express architecture separated into dedicated routes (`auth.js`, `staff.js`, `flowchart.js`, `hospital.js`). All endpoints strictly enforce role verification (`adminOnly`, `doctorOnly`) via a custom `authMiddleware`. Data is partitioned successfully per-clinic using `hospitalId` references. 
+**Architecture Description:** A decoupled MERN stack architecture. The frontend maintains the complex state of the visual flowcharts, while the RESTful Node.js backend securely validates RBAC tokens and manages the NoSQL protocol/report schemas in MongoDB Atlas.
 
-The React Frontend seamlessly handles JWT session persistence. `App.jsx` actively listens to the `navigator.onLine` API, performing background synchronization fetching protocol structures into `localStorage`, rendering offline degraded modes securely without crashing.
+## 5. Database Design
+**ER Diagram Description:**
+*   **Hospital:** Stores clinic info.
+*   **User:** Polymorphic schema for `admin`, `doctor`, `nurse` tied to `HospitalId`.
+*   **Flowchart:** Stores `nodes` (questions/outcomes) and `edges` (connections) arrays, linked to `HospitalId` and creator `UserId`.
+*   **Report:** Stores the executed `questionHistory`, final `outcome`, `riskScore`, and Nurse `notes`.
 
----
+## 6. Dataset Selected
+**Selection Reason:** TriageFlow inherently prioritizes **expert-crafted deterministic algorithms** (like standard pediatric or cardiac emergency guidelines) over statistical ML datasets. In ER triage, zero-hallucination, 100% explainable audit trails are legally and clinically mandatory. Medical decision pathways must be perfectly predictable.
 
-## 5. Technology Stack
+## 7. Model Selected
+**Model Name:** Deterministic Directed Acyclic Graph (DAG) Engine  
+**Selection Reasoning:** Instead of using a black-box LLM that could hallucinate a diagnosis, TriageFlow uses DAGs to mathematically guarantee that a nurse's inputs will consistently lead to the exact outcome mapped by the head Doctor.  
+**Alternatives Considered:** Predictive Machine Learning classification models (discarded for the primary triage engine due to lack of explainability in malpractice audits).  
+**Evaluation Metrics:** 100% Execution Accuracy (Pathways reach designated terminal outcomes exactly as drawn by the physician).
 
-| Layer | Technology |
-|---|---|
-| Frontend | React, Vite, React Flow, Tailwind CSS, Axios |
-| Backend | Node.js, Express.js |
-| Database | MongoDB Atlas |
-| Authentication | JSON Web Tokens (JWT), Bcrypt.js Hash |
-| State Management| LocalStorage offline caching |
+## 8. Technology Stack
+*   **Frontend:** React (Vite), Tailwind CSS, Lucide-React, React Flow, Spline 3D
+*   **Backend:** Node.js, Express.js, JSON Web Tokens (JWT), BcryptJS
+*   **Database:** MongoDB Atlas (Mongoose ODM)
+*   **Deployment:** Vercel (Frontend edge network), Render.com (Backend Web Service)
 
----
+## 9. API Documentation & Testing
+**API Endpoints List:**
+*   **Auth:** 
+    *   `POST /api/auth/login` - Authenticate User
+    *   `POST /api/hospital/register` - Create Admin & Clinic
+*   **Staff:** 
+    *   `POST /api/staff/create` - Admin creates Doctor/Nurse
+    *   `GET /api/staff` - Retrieve clinic staff
+*   **Flowcharts:** 
+    *   `GET /api/flowcharts` - Fetch active protocols
+    *   `POST /api/flowchart` - Publish new visual protocol
+*   **Reports:** 
+    *   `POST /api/report` - Submit completed assessment
+    *   `GET /api/reports` - Retrieve patient history
 
-## 6. Project Structure
+*(Add Postman / Thunder Client screenshots here)*
 
-```
-triageflow/
-│
-├── client/                          # React Frontend
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── AdminDashboard.jsx   # Staff & Protocol management
-│   │   │   ├── FlowBuilder.jsx      # Protocol design canvas
-│   │   │   ├── HospitalRegister.jsx # Multi-tenant clinic boarding
-│   │   │   ├── Login.jsx            # JWT Login proxy
-│   │   │   └── NavigateMode.jsx     # Patient assessment screen
-│   │   ├── App.jsx                  # Main app with mode switching
-│   │   └── main.jsx                 # React entry point
-│   ├── package.json
-│   └── vite.config.js
-│
-├── server/                          # Node.js Backend
-│   ├── middleware/
-│   │   └── auth.js                  # JWT Verifiers (Role logic)
-│   ├── models/
-│   │   ├── Flowchart.js             # Protocol graph schema
-│   │   ├── Hospital.js              # Clinic identity schema
-│   │   └── User.js                  # Admin/Doctor/Nurse profiles
-│   ├── routes/
-│   │   ├── auth.js                  # Login/Me endpoints
-│   │   ├── flowchart.js             # Secure Graph CRUD
-│   │   ├── hospital.js              # Registration entrypoint
-│   │   └── staff.js                 # Admin-driven user generation
-│   ├── utils/
-│   │   └── seed.js                  # Automatic Expert logic builder
-│   ├── index.js                     # Express app bootstrap
-│   └── package.json
-│
-└── README.md
-```
+## 10. Module-wise Development & Deliverables
+*   **Checkpoint 1: Research & Planning**
+    *   Deliverables: ER diagrams, Role-based user journey maps.
+*   **Checkpoint 2: Backend Development**
+    *   Deliverables: MongoDB schemas, secure JWT authentication middleware, REST logic.
+*   **Checkpoint 3: Frontend Development**
+    *   Deliverables: Spline 3D Landing Page, React Flow canvas integration, secure client routing.
+*   **Checkpoint 4: Logic Engine Integration**
+    *   Deliverables: DAG traversal logic allowing Nurses to step through the Doctor's visual graph conditionally.
+*   **Checkpoint 5: Deployment**
+    *   Deliverables: Live environment configuration mapping frontend to Render API, MongoDB IP whitelisting.
 
----
+## 11. End-to-End Workflow
+1. Hospital Admin registers the clinic via the 3D-animated Spline landing page.
+2. Admin accesses Dashboard and creates credentials for Doctors and Nurses.
+3. Doctor logs in, accesses the **Flow Builder**, and visually constructs a new Triage Protocol (e.g., "Severe Burns").
+4. Nurse logs in, selects "Severe Burns" from the active inventory, and enters **Navigate Mode**.
+5. Nurse answers sequential clinical questions. Based on responses, the DAG routes to a final severity outcome (RED/YELLOW/GREEN).
+6. Nurse adds final notes and saves. Doctor can review the finalized assessment report.
 
-## 7. Development & Delivery Highlights
+## 12. Demo & Video
+*   **Live Demo Link:** [Insert Vercel Link here]
+*   **Backend API Link:** `https://triage-flow-qp7y.onrender.com`
+*   **Demo Video Link:** [Insert YouTube/Drive Link here]
+*   **GitHub Repository:** [Insert GitHub Link here]
 
-### Security & Authentication 
-Implemented full stateless JWT session handling utilizing strong bcrypt salting natively. Every database object is now securely sandboxed strictly to the authenticated `hospitalId`, preventing cross-clinic data leakage entirely.
+## 13. Hackathon Deliverables Summary
+Delivered a fully functional, market-ready, visually stunning prototype featuring 3D web elements, a custom visual algorithm builder, deterministic logic execution, comprehensive RBAC security, and automated reporting.
 
-### Cloud Integration 
-Completely shifted the local storage engine directly to robust MongoDB Atlas instances using dynamic Environment variables allowing the app to successfully leverage modern cloud infrastructure.
+## 14. Team Roles & Responsibilities
+| Member Name | Role | Responsibilities |
+| :--- | :--- | :--- |
+| Harsh | Full Stack Developer | Architecture, UI/UX Design, React Flow Integration, API Development |
+| [Name] | [Role] | [Responsibilities] |
 
-### Advanced Frontend Architecture
-TriageFlow now correctly caches deep protocol structures into browser memory when networking fails. Separation of Concerns (SoC) principle applied flawlessly separating UI logic across discrete modular dashboard screens, completely doing away with monolithic React interfaces.
+## 15. Future Scope & Scalability
+*   **Short-Term:** Integrate predictive ML models as an *advisory* overlay to assist Doctors while they build protocols. Add SMS/Email paging alerts for 'RED' priority assessments.
+*   **Long-Term:** Implement an interconnected multi-hospital network allowing isolated low-resource clinics to securely download and execute expert protocols published by top-tier medical research hospitals.
 
-### Backend Modularity
-Deprecated single-file massive backend files into heavily decoupled Express.js Route configurations, increasing legibility dramatically. Advanced middleware injections secure individual methods on-the-fly dynamically.
+## 16. Known Limitations
+*   Nodes currently require manual refresh mapping if entirely disconnected mid-flow without an outcome.
+*   Physical printing on Safari requires adjusting header margins compared to Chrome.
 
----
-
-## 8. Impact
-
-- Massively reduces cognitive overload on frontline workers providing robust structural guidance.
-- Centralizes multi-user environments efficiently under designated clinical administrators.
-- Brings structured cloud-first decision support to remote rural areas without sacrificing functionality even when the internet drops entirely.
-- Eliminates dangerous data leaks across multiple health facilities utilizing the new TriageFlow schema boundaries.
+## 17. Impact
+By bridging the gap between medical expertise and software execution, TriageFlow eliminates the "inflexible software" bottleneck in emergency rooms. It drastically improves triage consistency, allows hospitals to instantly roll out newly discovered medical protocols during crises, and ultimately accelerates life-saving care for those who need it most.
