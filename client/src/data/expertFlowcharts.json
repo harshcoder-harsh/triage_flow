@@ -1,0 +1,857 @@
+[
+  {
+    "_id": "022e74a9866fcecaacd087b7",
+    "name": "Fever & Respiratory Assessment",
+    "category": "Fever",
+    "isExpert": true,
+    "nodes": [
+      {
+        "id": "q-bg6o1lb",
+        "position": {
+          "x": 300,
+          "y": 50
+        },
+        "data": {
+          "label": "Does the patient have fever?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-ts153p8",
+        "position": {
+          "x": 150,
+          "y": 200
+        },
+        "data": {
+          "label": "Is temperature above 103°F?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-4v8mh78",
+        "position": {
+          "x": 0,
+          "y": 350
+        },
+        "data": {
+          "label": "Is there difficulty breathing?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-no3c749",
+        "position": {
+          "x": -150,
+          "y": 500
+        },
+        "data": {
+          "label": "Emergency respiratory distress. Escalate immediately.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-nkk677d",
+        "position": {
+          "x": 150,
+          "y": 500
+        },
+        "data": {
+          "label": "High fever above 103°F. Escalate to doctor now.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-gsbh1l1",
+        "position": {
+          "x": 300,
+          "y": 500
+        },
+        "data": {
+          "label": "Has fever lasted more than 3 days?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-svvrukf",
+        "position": {
+          "x": 150,
+          "y": 650
+        },
+        "data": {
+          "label": "Persistent fever. Needs doctor evaluation.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-ffqjazu",
+        "position": {
+          "x": 450,
+          "y": 650
+        },
+        "data": {
+          "label": "Moderate fever. Monitor every 2 hours.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-c7grddt",
+        "position": {
+          "x": 450,
+          "y": 650
+        },
+        "data": {
+          "label": "Is there cough or difficulty breathing?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-5rpvucd",
+        "position": {
+          "x": 300,
+          "y": 800
+        },
+        "data": {
+          "label": "Respiratory symptoms without fever. Monitor.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-xbj2aun",
+        "position": {
+          "x": 600,
+          "y": 800
+        },
+        "data": {
+          "label": "No fever or respiratory symptoms. Home care.",
+          "priority": "GREEN"
+        },
+        "type": "default"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-q-bg6o1lb-q-ts153p8",
+        "source": "q-bg6o1lb",
+        "target": "q-ts153p8",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-ts153p8-q-4v8mh78",
+        "source": "q-ts153p8",
+        "target": "q-4v8mh78",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-4v8mh78-outcome-no3c749",
+        "source": "q-4v8mh78",
+        "target": "outcome-no3c749",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-4v8mh78-outcome-nkk677d",
+        "source": "q-4v8mh78",
+        "target": "outcome-nkk677d",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-ts153p8-q-gsbh1l1",
+        "source": "q-ts153p8",
+        "target": "q-gsbh1l1",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-gsbh1l1-outcome-svvrukf",
+        "source": "q-gsbh1l1",
+        "target": "outcome-svvrukf",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-gsbh1l1-outcome-ffqjazu",
+        "source": "q-gsbh1l1",
+        "target": "outcome-ffqjazu",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-bg6o1lb-q-c7grddt",
+        "source": "q-bg6o1lb",
+        "target": "q-c7grddt",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-c7grddt-outcome-5rpvucd",
+        "source": "q-c7grddt",
+        "target": "outcome-5rpvucd",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-c7grddt-outcome-xbj2aun",
+        "source": "q-c7grddt",
+        "target": "outcome-xbj2aun",
+        "label": "No",
+        "animated": false
+      }
+    ],
+    "createdAt": "2026-03-01T00:20:25.677Z"
+  },
+  {
+    "_id": "7fefadf638bebedbec1d5447",
+    "name": "Chest Pain Assessment",
+    "category": "Cardiac",
+    "isExpert": true,
+    "nodes": [
+      {
+        "id": "q-djv493t",
+        "position": {
+          "x": 300,
+          "y": 50
+        },
+        "data": {
+          "label": "Is the chest pain severe (8-10 out of 10)?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-oxw1lir",
+        "position": {
+          "x": 150,
+          "y": 200
+        },
+        "data": {
+          "label": "Severe chest pain. Call ambulance immediately.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-88oh1rz",
+        "position": {
+          "x": 450,
+          "y": 200
+        },
+        "data": {
+          "label": "Is pain radiating to arm or jaw?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-oq60t71",
+        "position": {
+          "x": 300,
+          "y": 350
+        },
+        "data": {
+          "label": "Possible cardiac event. Escalate now.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-4a0u1r7",
+        "position": {
+          "x": 600,
+          "y": 350
+        },
+        "data": {
+          "label": "Is there shortness of breath?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-c6z0n0n",
+        "position": {
+          "x": 450,
+          "y": 500
+        },
+        "data": {
+          "label": "Chest pain with breathlessness. Immediate evaluation.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-sl8mddb",
+        "position": {
+          "x": 750,
+          "y": 500
+        },
+        "data": {
+          "label": "Has pain lasted more than 20 minutes?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-3inln1e",
+        "position": {
+          "x": 600,
+          "y": 650
+        },
+        "data": {
+          "label": "Prolonged chest pain. Needs evaluation.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-yz1z8a1",
+        "position": {
+          "x": 900,
+          "y": 650
+        },
+        "data": {
+          "label": "Mild chest pain. Monitor and evaluate.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-q-djv493t-outcome-oxw1lir",
+        "source": "q-djv493t",
+        "target": "outcome-oxw1lir",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-djv493t-q-88oh1rz",
+        "source": "q-djv493t",
+        "target": "q-88oh1rz",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-88oh1rz-outcome-oq60t71",
+        "source": "q-88oh1rz",
+        "target": "outcome-oq60t71",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-88oh1rz-q-4a0u1r7",
+        "source": "q-88oh1rz",
+        "target": "q-4a0u1r7",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-4a0u1r7-outcome-c6z0n0n",
+        "source": "q-4a0u1r7",
+        "target": "outcome-c6z0n0n",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-4a0u1r7-q-sl8mddb",
+        "source": "q-4a0u1r7",
+        "target": "q-sl8mddb",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-sl8mddb-outcome-3inln1e",
+        "source": "q-sl8mddb",
+        "target": "outcome-3inln1e",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-sl8mddb-outcome-yz1z8a1",
+        "source": "q-sl8mddb",
+        "target": "outcome-yz1z8a1",
+        "label": "No",
+        "animated": false
+      }
+    ],
+    "createdAt": "2026-03-01T00:20:25.681Z"
+  },
+  {
+    "_id": "5a198670ad9ffd6653e1ae10",
+    "name": "Pediatric Fever Protocol",
+    "category": "Pediatric",
+    "isExpert": true,
+    "nodes": [
+      {
+        "id": "q-jsvc5yw",
+        "position": {
+          "x": 300,
+          "y": 50
+        },
+        "data": {
+          "label": "Is the child under 3 months old?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-9msjv1v",
+        "position": {
+          "x": 150,
+          "y": 200
+        },
+        "data": {
+          "label": "Any fever in infant under 3 months is emergency.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-ih2t0sg",
+        "position": {
+          "x": 450,
+          "y": 200
+        },
+        "data": {
+          "label": "Is temperature above 104°F?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-ez4s794",
+        "position": {
+          "x": 300,
+          "y": 350
+        },
+        "data": {
+          "label": "Dangerously high fever. Escalate immediately.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-bxehtgo",
+        "position": {
+          "x": 600,
+          "y": 350
+        },
+        "data": {
+          "label": "Is child lethargic or not responding normally?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-qwk8h58",
+        "position": {
+          "x": 450,
+          "y": 500
+        },
+        "data": {
+          "label": "Altered consciousness in child. Emergency.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-qkzwqkg",
+        "position": {
+          "x": 750,
+          "y": 500
+        },
+        "data": {
+          "label": "Has fever lasted more than 2 days?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-tgqsoom",
+        "position": {
+          "x": 600,
+          "y": 650
+        },
+        "data": {
+          "label": "Persistent pediatric fever. Doctor evaluation needed.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-56eixeg",
+        "position": {
+          "x": 900,
+          "y": 650
+        },
+        "data": {
+          "label": "Moderate pediatric fever. Monitor every hour.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-q-jsvc5yw-outcome-9msjv1v",
+        "source": "q-jsvc5yw",
+        "target": "outcome-9msjv1v",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-jsvc5yw-q-ih2t0sg",
+        "source": "q-jsvc5yw",
+        "target": "q-ih2t0sg",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-ih2t0sg-outcome-ez4s794",
+        "source": "q-ih2t0sg",
+        "target": "outcome-ez4s794",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-ih2t0sg-q-bxehtgo",
+        "source": "q-ih2t0sg",
+        "target": "q-bxehtgo",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-bxehtgo-outcome-qwk8h58",
+        "source": "q-bxehtgo",
+        "target": "outcome-qwk8h58",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-bxehtgo-q-qkzwqkg",
+        "source": "q-bxehtgo",
+        "target": "q-qkzwqkg",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-qkzwqkg-outcome-tgqsoom",
+        "source": "q-qkzwqkg",
+        "target": "outcome-tgqsoom",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-qkzwqkg-outcome-56eixeg",
+        "source": "q-qkzwqkg",
+        "target": "outcome-56eixeg",
+        "label": "No",
+        "animated": false
+      }
+    ],
+    "createdAt": "2026-03-01T00:20:25.681Z"
+  },
+  {
+    "_id": "3194a83f661a3a6d8d0eb92b",
+    "name": "Wound & Bleeding Assessment",
+    "category": "Emergency",
+    "isExpert": true,
+    "nodes": [
+      {
+        "id": "q-i6i80ts",
+        "position": {
+          "x": 300,
+          "y": 50
+        },
+        "data": {
+          "label": "Is there severe uncontrolled bleeding?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-vp6rzne",
+        "position": {
+          "x": 150,
+          "y": 200
+        },
+        "data": {
+          "label": "Severe bleeding. Apply pressure. Emergency immediately.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-fd1ttj3",
+        "position": {
+          "x": 450,
+          "y": 200
+        },
+        "data": {
+          "label": "Is the wound deeper than 1cm or gaping open?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-syhk32h",
+        "position": {
+          "x": 300,
+          "y": 350
+        },
+        "data": {
+          "label": "Deep wound. Needs stitching. Send to doctor.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-uhi6civ",
+        "position": {
+          "x": 600,
+          "y": 350
+        },
+        "data": {
+          "label": "Are there signs of infection (redness, pus, swelling)?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-u6x8jf1",
+        "position": {
+          "x": 450,
+          "y": 500
+        },
+        "data": {
+          "label": "Wound infection signs. Needs medical treatment.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-k90bqj7",
+        "position": {
+          "x": 750,
+          "y": 500
+        },
+        "data": {
+          "label": "Minor wound. Clean and bandage. Home care.",
+          "priority": "GREEN"
+        },
+        "type": "default"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-q-i6i80ts-outcome-vp6rzne",
+        "source": "q-i6i80ts",
+        "target": "outcome-vp6rzne",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-i6i80ts-q-fd1ttj3",
+        "source": "q-i6i80ts",
+        "target": "q-fd1ttj3",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-fd1ttj3-outcome-syhk32h",
+        "source": "q-fd1ttj3",
+        "target": "outcome-syhk32h",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-fd1ttj3-q-uhi6civ",
+        "source": "q-fd1ttj3",
+        "target": "q-uhi6civ",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-uhi6civ-outcome-u6x8jf1",
+        "source": "q-uhi6civ",
+        "target": "outcome-u6x8jf1",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-uhi6civ-outcome-k90bqj7",
+        "source": "q-uhi6civ",
+        "target": "outcome-k90bqj7",
+        "label": "No",
+        "animated": false
+      }
+    ],
+    "createdAt": "2026-03-01T00:20:25.681Z"
+  },
+  {
+    "_id": "69307439ae40b1588eca9cc9",
+    "name": "Unconscious Patient Protocol",
+    "category": "Emergency",
+    "isExpert": true,
+    "nodes": [
+      {
+        "id": "q-w453njz",
+        "position": {
+          "x": 300,
+          "y": 50
+        },
+        "data": {
+          "label": "Is the patient completely unconscious?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-toll3xy",
+        "position": {
+          "x": 150,
+          "y": 200
+        },
+        "data": {
+          "label": "Unconscious patient. Emergency. Call ambulance now.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-1u4oicl",
+        "position": {
+          "x": 450,
+          "y": 200
+        },
+        "data": {
+          "label": "Is the patient confused or disoriented?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-m3k8y5h",
+        "position": {
+          "x": 300,
+          "y": 350
+        },
+        "data": {
+          "label": "Has patient had a seizure?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-o67auhk",
+        "position": {
+          "x": 150,
+          "y": 500
+        },
+        "data": {
+          "label": "Post-seizure state. Emergency escalation.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-z51rx4r",
+        "position": {
+          "x": 450,
+          "y": 500
+        },
+        "data": {
+          "label": "Altered mental status. Escalate immediately.",
+          "priority": "RED"
+        },
+        "type": "default"
+      },
+      {
+        "id": "q-u0rjw31",
+        "position": {
+          "x": 600,
+          "y": 500
+        },
+        "data": {
+          "label": "Is patient complaining of severe headache?"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-e5vok92",
+        "position": {
+          "x": 450,
+          "y": 650
+        },
+        "data": {
+          "label": "Severe headache with mild confusion. Evaluate.",
+          "priority": "YELLOW"
+        },
+        "type": "default"
+      },
+      {
+        "id": "outcome-kxlnzna",
+        "position": {
+          "x": 750,
+          "y": 650
+        },
+        "data": {
+          "label": "Patient alert and oriented. Monitor.",
+          "priority": "GREEN"
+        },
+        "type": "default"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-q-w453njz-outcome-toll3xy",
+        "source": "q-w453njz",
+        "target": "outcome-toll3xy",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-w453njz-q-1u4oicl",
+        "source": "q-w453njz",
+        "target": "q-1u4oicl",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-1u4oicl-q-m3k8y5h",
+        "source": "q-1u4oicl",
+        "target": "q-m3k8y5h",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-m3k8y5h-outcome-o67auhk",
+        "source": "q-m3k8y5h",
+        "target": "outcome-o67auhk",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-m3k8y5h-outcome-z51rx4r",
+        "source": "q-m3k8y5h",
+        "target": "outcome-z51rx4r",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-1u4oicl-q-u0rjw31",
+        "source": "q-1u4oicl",
+        "target": "q-u0rjw31",
+        "label": "No",
+        "animated": false
+      },
+      {
+        "id": "e-q-u0rjw31-outcome-e5vok92",
+        "source": "q-u0rjw31",
+        "target": "outcome-e5vok92",
+        "label": "Yes",
+        "animated": false
+      },
+      {
+        "id": "e-q-u0rjw31-outcome-kxlnzna",
+        "source": "q-u0rjw31",
+        "target": "outcome-kxlnzna",
+        "label": "No",
+        "animated": false
+      }
+    ],
+    "createdAt": "2026-03-01T00:20:25.681Z"
+  }
+]

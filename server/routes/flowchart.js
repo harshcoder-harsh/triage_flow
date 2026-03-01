@@ -7,8 +7,15 @@ const router = express.Router();
 // GET all flowcharts - maps to /api/flowcharts in index.js
 router.get('/flowcharts', authMiddleware, async (req, res) => {
   try {
+    const filter = [{ hospitalId: req.user.hospitalId }];
+    
+    // Nurses can ONLY see 'published' (locked) protocols. Doctors can see all.
+    if (req.user.role === 'nurse') {
+      filter[0].status = 'published';
+    }
+    
     const flowcharts = await Flowchart.find({ 
-      $or: [{ hospitalId: req.user.hospitalId }, { isExpert: true }] 
+      $or: [...filter, { isExpert: true }] 
     });
     res.json(flowcharts);
   } catch (err) {

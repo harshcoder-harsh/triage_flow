@@ -1,14 +1,38 @@
 import { useState, useEffect } from 'react'
+import { useNodesState, useEdgesState } from 'reactflow'
 import FlowBuilder from './components/FlowBuilder'
 import NavigateMode from './components/NavigateMode'
 import Login from './components/Login'
 import HospitalRegister from './components/HospitalRegister'
 import AdminDashboard from './components/AdminDashboard'
+import ReportInbox from './components/ReportInbox'
 import axios from 'axios'
+
+const defaultNodeStyle = {
+  background: '#fff',
+  border: '2px solid #1e293b',
+  borderRadius: '12px',
+  padding: '16px',
+  width: '180px',
+  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+  fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+}
+
+const initialNodes = [
+  {
+    id: 'root-1',
+    position: { x: 300, y: 50 },
+    data: { label: 'New Question?' },
+    type: 'default',
+    style: { ...defaultNodeStyle }
+  }
+]
 export default function App() {
   const [mode, setMode] = useState('login')
   const [user, setUser] = useState(null)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState([])
 
   // Check authentication on startup and handle online/offline events
   useEffect(() => {
@@ -118,6 +142,16 @@ export default function App() {
             Navigate Protocol
           </button>
 
+          {/* Reports Tab - Doctor Only */}
+          {user?.role === 'doctor' && (
+            <button
+              onClick={() => setMode('reports')}
+              className={`px-4 py-1.5 rounded-md font-medium transition-colors ${mode === 'reports' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-300 hover:bg-slate-700'}`}
+            >
+              📋 Reports
+            </button>
+          )}
+
           <button
             onClick={handleLogout}
             className="ml-2 px-3 py-1.5 border border-slate-600 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:border-slate-400 hover:bg-slate-700 transition-colors"
@@ -129,8 +163,9 @@ export default function App() {
 
       <div className="flex-1 min-h-0 relative">
         {mode === 'admin' && <AdminDashboard isOnline={isOnline} />}
-        {mode === 'builder' && <FlowBuilder />}
+        {mode === 'builder' && <FlowBuilder nodes={nodes} setNodes={setNodes} onNodesChange={onNodesChange} edges={edges} setEdges={setEdges} onEdgesChange={onEdgesChange} />}
         {mode === 'navigate' && <NavigateMode isOnline={isOnline} />}
+        {mode === 'reports' && <ReportInbox doctorHospitalId={user?.hospitalId} doctorId={user?.id} />}
       </div>
     </div>
   )

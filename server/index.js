@@ -8,6 +8,7 @@ const hospitalRoutes = require('./routes/hospital');
 const authRoutes = require('./routes/auth');
 const staffRoutes = require('./routes/staff');
 const flowchartRoutes = require('./routes/flowchart');
+const reportRoutes = require('./routes/report');
 
 // Import seed utility
 const { seedExpertFlowcharts } = require('./utils/seed');
@@ -26,6 +27,7 @@ app.use('/api/hospital', hospitalRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/staff', staffRoutes);
 app.use('/api', flowchartRoutes);
+app.use('/api', reportRoutes);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, async () => {
